@@ -1,11 +1,16 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Switch,
+  FormControlLabel,
+} from '@material-ui/core'
 
 import appStore from '../stores/appStore'
+import mapStore from '../stores/mapStore'
 import configStore from '../stores/configStore'
 import parcelStore from '../stores/parcelStore'
 import { renderPlace } from '../stores/configStore'
@@ -52,6 +57,18 @@ export default class Sidebar extends React.Component {
             ))}
           </Select>
         </FormControl>
+        <br />
+        <br />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={mapStore.mapLabelsVisible}
+              onChange={v => mapStore.setMapLabelsVisible(v.target.checked)}
+              color="secondary"
+            />
+          }
+          label="Show Map Labels"
+        />
       </div>
     )
 

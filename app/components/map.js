@@ -3,6 +3,7 @@ import React from 'react'
 import appStore from '../stores/appStore'
 import mapStore from '../stores/mapStore'
 import configStore from '../stores/configStore'
+import { setLabelLayerVisible } from './styles'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZnNjb3R0Zm90aSIsImEiOiJLVHVqNHlNIn0.T0Ca4SWbbTc1p2jogYLQyA'
 
@@ -23,6 +24,7 @@ export default class Map extends React.Component {
 
     map.on('style.load', () => {
       mapStore.setMap(map)
+      setLabelLayerVisible(map, mapStore.mapLabelsVisible)
       mapStore.addLayers()
       this.initHover(map)
     })

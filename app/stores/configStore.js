@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { computed } from 'mobx'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '@material-ui/core'
 import numeral from 'numeral'
 
 class ConfigStore {

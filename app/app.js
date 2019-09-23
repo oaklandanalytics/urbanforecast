@@ -12,7 +12,7 @@ import appStore from './stores/appStore'
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#37474f' },
-    secondary: { main: '#11cb5f' },
+    secondary: { main: '#ff8a65' },
   },
 })
 

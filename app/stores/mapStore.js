@@ -1,12 +1,13 @@
-import { computed } from 'mobx'
+import { computed, observable, action } from 'mobx'
 import _ from 'lodash'
 
-import { addLayers } from '../components/styles'
+import { addLayers, setLabelLayerVisible } from '../components/styles'
 
 import configStore from './configStore'
 import parcelStore from './parcelStore'
 
 class MapStore {
+  @observable mapLabelsVisible = false
   baseMap = 'light'
   map
   legendParams
@@ -22,6 +23,12 @@ class MapStore {
 
   addLayers() {
     addLayers(this.map)
+  }
+
+  @action
+  setMapLabelsVisible(mapLabelsVisible) {
+    this.mapLabelsVisible = mapLabelsVisible
+    setLabelLayerVisible(this.map, mapLabelsVisible)
   }
 
   setParcelCircles(geojson) {
