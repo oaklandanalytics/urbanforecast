@@ -28,19 +28,16 @@ class MapStore {
     this.map.getSource('parcelCircles').setData(geojson)
   }
 
-  applyTheme(source, values, { colorScale, radiusScale }) {
+  applyTheme(source, values, { colorScale }) {
     values.forEach((v, id) => {
-      this.map.setFeatureState(
-        { source, id },
-        { color: colorScale(v), opacity: 1, radius: radiusScale(v) }
-      )
+      this.map.setFeatureState({ source, id }, { color: colorScale(v) })
     })
   }
 
-  computeTheme(data, { themeType, colorRange, radiusRange, colorMap }) {
+  computeTheme(data, { themeType, colorRange, colorMap }) {
     console.log('Theming', data)
 
-    let colorScale, radiusScale
+    let colorScale
     if (themeType === 'interpolate') {
       const e = d3.extent(data)
 
@@ -49,11 +46,6 @@ class MapStore {
         .domain(e)
         .interpolate(d3.interpolateRgb)
         .range(colorRange)
-
-      radiusScale = d3.scale
-        .linear()
-        .domain(e)
-        .range(radiusRange)
 
       /*
       // build some intervals in the interpolation range for
@@ -72,7 +64,6 @@ class MapStore {
        */
     } else if (themeType === 'categorical') {
       colorScale = v => _.get(colorMap, v, colorMap._DEFAULT_)
-      radiusScale = () => 5
 
       /*
       var keys = t.legendKeys || _.keys(t.categorical)
@@ -90,7 +81,7 @@ class MapStore {
       console.log('Theme type not supported')
     }
 
-    return { colorScale, radiusScale }
+    return { colorScale }
   }
 
   activateTheme(activeTheme) {

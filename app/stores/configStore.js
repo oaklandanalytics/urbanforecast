@@ -35,7 +35,6 @@ class ConfigStore {
       type: 'float',
       themeType: 'interpolate',
       colorRange: ['#edf8fb', '#005824'],
-      radiusRange: [4, 7],
     },
     {
       attribute: 'job_spaces',
@@ -43,7 +42,6 @@ class ConfigStore {
       type: 'float',
       themeType: 'interpolate',
       colorRange: ['#f7fbff', '#08306b'],
-      radiusRange: [4, 7],
     },
   ]
 
