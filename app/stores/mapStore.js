@@ -1,6 +1,10 @@
 import { computed } from 'mobx'
+import _ from 'lodash'
 
 import { addLayers } from '../components/styles'
+
+import configStore from './configStore'
+import parcelStore from './parcelStore'
 
 class MapStore {
   baseMap = 'light'
@@ -86,6 +90,21 @@ class MapStore {
     }
 
     return { colorScale, radiusScale }
+  }
+
+  activateTheme(activeTheme) {
+    console.log('Activate theme', activeTheme)
+    const themeConfig = configStore.getThemeConfig(activeTheme)
+
+    let data = parcelStore.getAttribute(themeConfig.attribute)
+
+    if (themeConfig.type === 'float') {
+      data = _.map(data, d => +d)
+    }
+
+    const theme = this.computeTheme(data, themeConfig)
+
+    this.applyTheme('parcelCircles', data, theme)
   }
 }
 

@@ -1,9 +1,13 @@
-import parcelStore from './parcelStore'
 import { observable, action } from 'mobx'
+
+import configStore from './configStore'
+import parcelStore from './parcelStore'
+import mapStore from './mapStore'
 
 class AppStore {
   @observable activeFeature
   @observable showSidebar = true
+  @observable activeTheme = configStore.defaultTheme
 
   init() {
     parcelStore.load()
@@ -15,8 +19,13 @@ class AppStore {
   }
 
   @action
+  setActiveTheme(activeTheme) {
+    this.activeTheme = activeTheme
+    mapStore.activateTheme(activeTheme)
+  }
+
+  @action
   toggleSidebar() {
-    console.log(this.showSidebar)
     this.showSidebar = !this.showSidebar
   }
 }

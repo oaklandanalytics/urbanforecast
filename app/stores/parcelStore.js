@@ -1,10 +1,10 @@
 import d3 from 'd3'
-import _ from 'lodash'
 
 import { csv2features, features2geojson } from '../utils'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
+import appStore from './appStore'
 
 class ParcelStore {
   features
@@ -25,14 +25,12 @@ class ParcelStore {
 
       mapStore.setParcelCircles(features2geojson(this.features))
 
-      const data = _.map(rows, row => +row.residential_units)
-      const theme = mapStore.computeTheme(data, {
-        themeType: 'interpolate',
-        colorRange: ['#f7fbff', '#08306b'],
-        radiusRange: [4, 7],
-      })
-      mapStore.applyTheme('parcelCircles', data, theme)
+      mapStore.activateTheme(appStore.activeTheme)
     })
+  }
+
+  getAttribute(attribute) {
+    return this.features.map(f => f.properties[attribute])
   }
 }
 

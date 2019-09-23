@@ -1,9 +1,15 @@
 import React from 'react'
 import { observer } from 'mobx-react'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
 
 import appStore from '../stores/appStore'
+import configStore from '../stores/configStore'
 import parcelStore from '../stores/parcelStore'
 import { renderPlace } from '../stores/configStore'
+import { Typography } from '@material-ui/core'
 
 @observer
 export default class Sidebar extends React.Component {
@@ -28,9 +34,30 @@ export default class Sidebar extends React.Component {
       </div>
     )
 
+    const defaultPanel = () => (
+      <div>
+        <h2>Control Panel</h2>
+        <Typography variant="body2">Click any place for more information</Typography>
+        <br />
+        <FormControl>
+          <InputLabel shrink>Active Theme</InputLabel>
+          <Select
+            value={appStore.activeTheme}
+            onChange={v => appStore.setActiveTheme(v.target.value)}
+          >
+            {configStore.themes.map(t => (
+              <MenuItem value={t.attribute} key={t.attribute}>
+                {t.display}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+    )
+
     return (
       <div style={sideStyle}>
-        <div style={{ margin: 15 }}>{activeFeature && activeFeaturePanel()}</div>
+        <div style={{ margin: 15 }}>{activeFeature ? activeFeaturePanel() : defaultPanel()}</div>
       </div>
     )
   }
