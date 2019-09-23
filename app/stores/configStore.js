@@ -4,6 +4,8 @@ import { computed } from 'mobx'
 import { Typography } from '@material-ui/core'
 import numeral from 'numeral'
 
+import appStore from './appStore'
+
 class ConfigStore {
   center = [-122.3, 37.7749]
   zoom = 10
@@ -26,7 +28,6 @@ class ConfigStore {
         MR: '#755D35',
         MT: '#3d3319',
         ME: '#5D0001',
-        _DEFAULT_: '#fff',
       },
     },
     {
@@ -50,7 +51,9 @@ class ConfigStore {
     return this.themes[0].attribute
   }
 
-  getThemeConfig(attribute) {
+  @computed
+  get activeThemeConfig() {
+    const attribute = appStore.activeTheme
     return _.find(this.themes, { attribute })
   }
 }

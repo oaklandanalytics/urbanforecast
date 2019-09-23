@@ -21,9 +21,9 @@ export default class Sidebar extends React.Component {
   render() {
     const sideStyle = {
       position: 'absolute',
-      top: 75,
-      right: 15,
-      bottom: 15,
+      top: 70,
+      right: 10,
+      bottom: 10,
       width: 350,
       overflow: 'auto',
       background: 'rgba(255, 255, 255, 1)',

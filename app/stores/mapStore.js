@@ -10,7 +10,7 @@ class MapStore {
   @observable mapLabelsVisible = false
   baseMap = 'light'
   map
-  legendParams
+  @observable legendParams
 
   @computed
   get baseMapUrl() {
@@ -31,20 +31,26 @@ class MapStore {
     setLabelLayerVisible(this.map, mapLabelsVisible)
   }
 
+  @action
+  setLegendParams(legendParams) {
+    this.legendParams = legendParams
+  }
+
   setParcelCircles(geojson) {
     this.map.getSource('parcelCircles').setData(geojson)
   }
 
-  applyTheme(source, values, { colorScale }) {
+  applyTheme(source, values, { colorScale, legendParams }) {
     values.forEach((v, id) => {
       this.map.setFeatureState({ source, id }, { color: colorScale(v) })
     })
+    this.setLegendParams(legendParams)
   }
 
   computeTheme(data, { themeType, colorRange, colorMap }) {
     console.log('Theming', data)
 
-    let colorScale
+    let colorScale, legendParams
     if (themeType === 'interpolate') {
       const e = d3.extent(data)
 
@@ -54,46 +60,33 @@ class MapStore {
         .interpolate(d3.interpolateRgb)
         .range(colorRange)
 
-      /*
-      // build some intervals in the interpolation range for
-      // use in the legend
-      var legendDomain = _.range(min, max, (max - min) / 5.0)
+      // build some intervals in the interpolation range for use in the legend
+      const min = e[0]
+      const max = e[1]
+      const legendDomain = _.range(min, max, (max - min) / 5.0)
       legendDomain.push(max) // push the max too
 
-      this.setState({
-        legendParams: {
-          dontFormatLegend: t.dontFormatLegend,
-          grades: legendDomain,
-          colors: legendDomain.map(a => scale(a)),
-          heading: t.legendName || t.attr,
-        },
-      })
-       */
+      legendParams = {
+        grades: legendDomain,
+        colors: legendDomain.map(colorScale),
+      }
     } else if (themeType === 'categorical') {
-      colorScale = v => _.get(colorMap, v, colorMap._DEFAULT_)
+      colorScale = v => _.get(colorMap, v)
 
-      /*
-      var keys = t.legendKeys || _.keys(t.categorical)
-
-      this.setState({
-        legendParams: {
-          dontFormatLegend: t.dontFormatLegend,
-          grades: keys,
-          colors: keys.map(k => t.categorical[k]),
-          heading: t.attr,
-        },
-      })
-       */
+      legendParams = {
+        grades: _.keys(colorMap),
+        colors: _.values(colorMap),
+      }
     } else {
       console.log('Theme type not supported')
     }
 
-    return { colorScale }
+    return { colorScale, legendParams }
   }
 
   activateTheme(activeTheme) {
     console.log('Activate theme', activeTheme)
-    const themeConfig = configStore.getThemeConfig(activeTheme)
+    const themeConfig = configStore.activeThemeConfig
 
     let data = parcelStore.getAttribute(themeConfig.attribute)
 

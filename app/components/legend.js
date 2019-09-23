@@ -1,15 +1,15 @@
 import React from 'react'
-import autoBind from 'react-autobind'
+import { observer } from 'mobx-react'
 import numeral from 'numeral'
-import _ from 'underscore'
+import _ from 'lodash'
+import { Typography } from '@material-ui/core'
 
+import mapStore from '../stores/mapStore'
+import configStore from '../stores/configStore'
+
+@observer
 export default class Legend extends React.Component {
-  constructor(props) {
-    super(props)
-    autoBind(this)
-  }
-
-  getIStyle(v) {
+  static getIStyle(v) {
     return {
       width: 18,
       height: 18,
@@ -21,8 +21,8 @@ export default class Legend extends React.Component {
   }
 
   // format the number appropriately for the legend
-  formatNumber(num) {
-    if (this.props.dontFormatLegend) return num
+  static formatNumber(num) {
+    if (configStore.activeThemeConfig.dontFormatLegend) return num
 
     if (!_.isNumber(num)) return num
 
@@ -32,61 +32,52 @@ export default class Legend extends React.Component {
     if (num < -1000 || num > 1000) {
       return numeral(num / 1000).format('0,0.0') + 'k'
     }
-    if (num < 1.0 && num > -1.0 && num != 0) {
-      if ((num * 10) % 1 != 0) {
+    if (num < 1.0 && num > -1.0 && num !== 0) {
+      if ((num * 10) % 1 !== 0) {
         return numeral(num).format('.00')
       } else {
         return numeral(num).format('.0')
       }
     }
-    if (num % 1 != 0 && num <= 20) {
+    if (num % 1 !== 0 && num <= 20) {
       return numeral(num).format('0.0')
     }
-    if (num % 1 != 0) {
+    if (num % 1 !== 0) {
       return (num = Math.floor(num))
     }
     return num
   }
 
   render() {
-    if (!this.props.grades) return <span></span>
+    const { legendParams } = mapStore
+    if (!legendParams) return null
 
-    var legendStyle = {
+    const { grades, colors } = legendParams
+    const { display } = configStore.activeThemeConfig
+
+    const legendStyle = {
       position: 'absolute',
-      left: '13px',
-      bottom: '13px',
+      left: '7px',
+      bottom: '7px',
       padding: '6px 8px',
-      background: 'rgba(255,255,255,0.95)',
+      background: 'rgba(255,255,255,1)',
       boxShadow: '0 0 15px rgba(0,0,0,0.2)',
       borderRadius: '5px',
       textAlign: 'left',
       lineHeight: '19px',
       color: '#555',
+      zIndex: 9999999,
     }
-
-    var h4Style = {
-      margin: '0 0 5px',
-      color: '#777',
-    }
-
-    var heading = this.props.heading ? <h4 style={h4Style}>{this.props.heading}</h4> : ''
-
-    var that = this
-
-    var grades = this.props.grades.map(this.formatNumber)
 
     return (
       <div style={legendStyle}>
-        {heading}
-
-        {grades.map(function(v, i) {
-          return (
-            <div key={i}>
-              <i style={that.getIStyle(that.props.colors[i])}></i>
-              {v}
-            </div>
-          )
-        })}
+        {display && <Typography variant="h6">{display}</Typography>}
+        {grades.map(Legend.formatNumber).map((v, i) => (
+          <div key={i}>
+            <i style={Legend.getIStyle(colors[i])} />
+            {v}
+          </div>
+        ))}
       </div>
     )
   }

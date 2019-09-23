@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import Map from './components/map.js'
 import Navbar from './components/navbar'
 import Sidebar from './components/sidebar'
+import Legend from './components/legend'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { observer } from 'mobx-react'
@@ -28,6 +29,7 @@ class App extends React.Component {
         <ThemeProvider theme={theme}>
           <Navbar />
           <Map />
+          <Legend />
           {appStore.showSidebar && <Sidebar />}
         </ThemeProvider>
       </div>
