@@ -37,7 +37,7 @@ class MapStore {
     })
   }
 
-  computeTheme(data, { themeType, colorRange, radiusRange }) {
+  computeTheme(data, { themeType, colorRange, radiusRange, colorMap }) {
     console.log('Theming', data)
 
     let colorScale, radiusScale
@@ -71,9 +71,10 @@ class MapStore {
       })
        */
     } else if (themeType === 'categorical') {
-      /*
-      const scale = v => _.get(categoricalColorMap, v)
+      colorScale = v => _.get(colorMap, v, colorMap._DEFAULT_)
+      radiusScale = () => 5
 
+      /*
       var keys = t.legendKeys || _.keys(t.categorical)
 
       this.setState({

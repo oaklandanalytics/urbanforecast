@@ -19,6 +19,7 @@ export default class Map extends React.Component {
     })
 
     map.doubleClickZoom.disable()
+    map.dragRotate.disable()
 
     map.on('style.load', () => {
       mapStore.setMap(map)

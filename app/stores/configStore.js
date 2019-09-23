@@ -10,6 +10,26 @@ class ConfigStore {
   parcelUrl = 'data/run43_parcel_output.csv'
   themes = [
     {
+      attribute: 'building_type',
+      display: 'Building Type',
+      type: 'string',
+      themeType: 'categorical',
+      colorMap: {
+        HS: '#FEFF09',
+        HT: '#C3C553',
+        HM: '#FC4D06',
+        OF: '#FC53D7',
+        RS: '#FC1421',
+        RB: '#6e1011',
+        IL: '#7000FB',
+        IW: '#2f0066',
+        MR: '#755D35',
+        MT: '#3d3319',
+        ME: '#5D0001',
+        _DEFAULT_: '#fff',
+      },
+    },
+    {
       attribute: 'residential_units',
       display: 'Residential Units',
       type: 'float',
