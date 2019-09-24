@@ -22,11 +22,14 @@ class ParcelStore {
 
       console.log('Loaded parcels:', rows)
       this.features = csv2features(rows)
-
-      mapStore.setParcelCircles(features2geojson(this.features))
-
-      mapStore.activateTheme(appStore.activeTheme)
+      this.theme()
     })
+  }
+
+  theme() {
+    if (!this.features) return
+    mapStore.setParcelCircles(features2geojson(this.features))
+    mapStore.activateTheme(appStore.activeTheme)
   }
 
   getAttribute(attribute) {

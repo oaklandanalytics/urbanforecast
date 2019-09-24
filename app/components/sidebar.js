@@ -59,6 +59,21 @@ export default class Sidebar extends React.Component {
         </FormControl>
         <br />
         <br />
+        <FormControl>
+          <InputLabel shrink>Active Basemap</InputLabel>
+          <Select
+            value={mapStore.activeBaseMap}
+            onChange={v => mapStore.setActiveBaseMap(v.target.value)}
+          >
+            {['satellite', 'light', 'dark'].map(t => (
+              <MenuItem value={t} key={t}>
+                {t}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <br />
+        <br />
         <FormControlLabel
           control={
             <Switch

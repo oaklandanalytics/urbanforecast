@@ -7,14 +7,14 @@ import configStore from './configStore'
 import parcelStore from './parcelStore'
 
 class MapStore {
-  @observable mapLabelsVisible = false
-  baseMap = 'light'
   map
+  @observable mapLabelsVisible = false
+  @observable activeBaseMap = 'light'
   @observable legendParams
 
   @computed
   get baseMapUrl() {
-    return `mapbox://styles/mapbox/${this.baseMap}-v9`
+    return `mapbox://styles/mapbox/${this.activeBaseMap}-v9`
   }
 
   setMap(map) {
@@ -23,6 +23,12 @@ class MapStore {
 
   addLayers() {
     addLayers(this.map)
+  }
+
+  @action
+  setActiveBaseMap(baseMap) {
+    this.activeBaseMap = baseMap
+    this.map.setStyle(this.baseMapUrl)
   }
 
   @action
