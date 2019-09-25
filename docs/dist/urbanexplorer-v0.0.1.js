@@ -28714,7 +28714,7 @@ object-assign
               },
             },
             {
-              key: 'addLayers',
+              key: 'addParcelLayer',
               value: function() {
                 var e
                 ;(e = this.map).addSource('parcelCircles', {

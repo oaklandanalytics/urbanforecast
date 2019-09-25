@@ -11,6 +11,7 @@ class ConfigStore {
   zoom = 10
   parcelUrl = 'data/run43_parcel_output.csv'
   citiesUrl = 'https://fscottfoti.github.io/pda_parcels/cities.geojson'
+  tazUrl = 'https://bayareametro.github.io/petrale/zones/travel/tazs.json'
   themes = [
     {
       attribute: 'building_type',

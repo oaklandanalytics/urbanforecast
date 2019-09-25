@@ -17,7 +17,7 @@ export function setLabelLayerVisible(map, visible) {
   }
 }
 
-export function addLayers(map) {
+export function addParcelLayer(map) {
   map.addSource('parcelCircles', {
     type: 'geojson',
     data: {
@@ -43,6 +43,62 @@ export function addLayers(map) {
       },
     },
     getLabelLayer(map)
+  )
+}
+
+export function addPolygonLayers(map) {
+  const sourceName = 'polygons'
+  const layerName = 'polygons'
+  const bordersName = 'polygons_border'
+  const highlightLayerName = 'polygons_highlight'
+
+  map.addSource(sourceName, {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [],
+    },
+  })
+
+  map.addLayer(
+    {
+      id: layerName,
+      source: sourceName,
+      type: 'fill',
+      paint: {
+        'fill-color': ['string', ['feature-state', 'color'], '#fff'],
+        'fill-opacity': ['number', ['feature-state', 'opacity'], 1],
+      },
+    },
+    'parcelCircles'
+  )
+
+  map.addLayer(
+    {
+      id: bordersName,
+      type: 'line',
+      source: sourceName,
+      paint: {
+        'line-color': '#000000',
+        'line-width': 1,
+        'line-opacity': 0.3,
+      },
+    },
+    'parcelCircles'
+  )
+
+  map.addLayer(
+    {
+      id: highlightLayerName,
+      type: 'line',
+      source: sourceName,
+      paint: {
+        'line-color': '#ffff3e',
+        'line-width': 2,
+        'line-opacity': ['case', ['boolean', ['feature-state', 'active'], false], 1, 0],
+      },
+    },
+    'parcelCircles'
   )
 }
 

@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 
 import configStore from './configStore'
 import parcelStore from './parcelStore'
+import polygonStore from './polygonStore'
 import mapStore from './mapStore'
 
 class AppStore {
@@ -11,6 +12,7 @@ class AppStore {
 
   init() {
     parcelStore.load()
+    polygonStore.load()
   }
 
   @action

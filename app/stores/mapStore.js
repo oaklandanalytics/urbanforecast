@@ -1,7 +1,12 @@
 import { computed, observable, action } from 'mobx'
 import _ from 'lodash'
 
-import { addLayers, addCitiesOutlinesLayer, setLabelLayerVisible } from '../components/styles'
+import {
+  addParcelLayer,
+  addCitiesOutlinesLayer,
+  addPolygonLayers,
+  setLabelLayerVisible,
+} from '../components/styles'
 
 import configStore from './configStore'
 import parcelStore from './parcelStore'
@@ -22,8 +27,9 @@ class MapStore {
   }
 
   addLayers() {
-    addLayers(this.map)
+    addParcelLayer(this.map)
     addCitiesOutlinesLayer(this.map, configStore.citiesUrl, '#4e5156')
+    addPolygonLayers(this.map)
   }
 
   @action
@@ -45,6 +51,10 @@ class MapStore {
 
   setParcelCircles(geojson) {
     this.map.getSource('parcelCircles').setData(geojson)
+  }
+
+  setPolygons(geojson) {
+    this.map.getSource('polygons').setData(geojson)
   }
 
   applyTheme(source, values, { colorScale, legendParams }) {
