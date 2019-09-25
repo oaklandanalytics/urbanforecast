@@ -45,3 +45,38 @@ export function addLayers(map) {
     getLabelLayer(map)
   )
 }
+
+export function addCitiesOutlinesLayer(map, url, color) {
+  const layerName = 'cities'
+
+  if (map.getLayer(layerName)) {
+    map.removeLayer(layerName)
+  }
+
+  if (map.getSource(layerName)) {
+    map.removeSource(layerName)
+  }
+
+  if (!url) {
+    return
+  }
+
+  map.addSource(layerName, {
+    type: 'geojson',
+    data: url,
+  })
+
+  map.addLayer(
+    {
+      id: layerName,
+      type: 'line',
+      source: layerName,
+      paint: {
+        'line-opacity': 0.6,
+        'line-color': color || '#ffffff',
+        'line-dasharray': [2, 2],
+      },
+    },
+    'parcelCircles'
+  )
+}

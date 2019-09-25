@@ -10,6 +10,7 @@ class ConfigStore {
   center = [-122.3, 37.7749]
   zoom = 10
   parcelUrl = 'data/run43_parcel_output.csv'
+  citiesUrl = 'https://fscottfoti.github.io/pda_parcels/cities.geojson'
   themes = [
     {
       attribute: 'building_type',

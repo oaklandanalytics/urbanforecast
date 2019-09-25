@@ -1,7 +1,7 @@
 import { computed, observable, action } from 'mobx'
 import _ from 'lodash'
 
-import { addLayers, setLabelLayerVisible } from '../components/styles'
+import { addLayers, addCitiesOutlinesLayer, setLabelLayerVisible } from '../components/styles'
 
 import configStore from './configStore'
 import parcelStore from './parcelStore'
@@ -23,6 +23,7 @@ class MapStore {
 
   addLayers() {
     addLayers(this.map)
+    addCitiesOutlinesLayer(this.map, configStore.citiesUrl, '#4e5156')
   }
 
   @action
