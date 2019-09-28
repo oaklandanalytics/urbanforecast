@@ -8,7 +8,9 @@ import mapStore from './mapStore'
 class AppStore {
   @observable activeFeature
   @observable showSidebar = true
-  @observable activeTheme = configStore.defaultTheme
+  @observable activeParcelTheme = configStore.defaultTheme
+  @observable activePolygonTheme
+  @observable activePolygonYear
 
   init() {
     parcelStore.load()
@@ -21,9 +23,16 @@ class AppStore {
   }
 
   @action
-  setActiveTheme(activeTheme) {
-    this.activeTheme = activeTheme
-    mapStore.activateTheme(activeTheme)
+  setActiveParcelTheme(activeTheme) {
+    this.activeParcelTheme = activeTheme
+    mapStore.activateParcelTheme(activeTheme)
+  }
+
+  @action
+  setActivePolygonTheme(activeTheme, year) {
+    this.activePolygonTheme = activeTheme
+    this.activePolygonYear = year
+    mapStore.activatePolygonTheme(activeTheme, year)
   }
 
   @action

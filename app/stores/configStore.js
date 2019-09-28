@@ -56,7 +56,7 @@ class ConfigStore {
 
   @computed
   get activeThemeConfig() {
-    const attribute = appStore.activeTheme
+    const attribute = appStore.activeParcelTheme
     return _.find(this.themes, { attribute })
   }
 }

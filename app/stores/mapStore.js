@@ -1,7 +1,9 @@
-import { computed, observable, action } from 'mobx'
+import { computed, observable, action, toJS } from 'mobx'
 import _ from 'lodash'
 
 import { computeTheme } from '../theming'
+
+import appStore from './appStore'
 
 import {
   addParcelLayer,
@@ -18,7 +20,7 @@ class MapStore {
   map
   @observable mapLabelsVisible = false
   @observable activeBaseMap = 'light'
-  @observable legendParams
+  legendParams = observable.map()
   @observable showParcels = false
   @observable showPolygons = true
 
@@ -68,8 +70,8 @@ class MapStore {
   }
 
   @action
-  setLegendParams(legendParams) {
-    this.legendParams = legendParams
+  setLegendParams(type, legendParams) {
+    this.legendParams.set(type, legendParams)
   }
 
   setParcelCircles(geojson) {
@@ -82,14 +84,11 @@ class MapStore {
     this.map.getSource('polygons').setData(geojson)
   }
 
-  applyTheme(source, values, { colorScale, legendParams }, setLegend = true) {
-    console.log(source, values, colorScale, legendParams)
+  applyTheme(source, values, { colorScale, legendParams }, type) {
     values.forEach((v, id) => {
       this.map.setFeatureState({ source, id }, { color: colorScale(v) })
     })
-    if (setLegend) {
-      this.setLegendParams(legendParams)
-    }
+    this.setLegendParams(type, legendParams)
   }
 
   activateParcelTheme(activeTheme) {
@@ -104,24 +103,32 @@ class MapStore {
 
     const theme = computeTheme(data, themeConfig)
 
-    this.applyTheme('parcelCircles', data, theme)
+    this.applyTheme('parcelCircles', data, theme, 'parcels')
   }
 
+  /*
+  TODO
+  fix id of polygon layer
+  random color scheme
+  allow delta with 2nd year
+  figure out what to do with legend
+  */
+
   activatePolygonTheme() {
-    const themeConfig = {
-      attribute: 'county',
-      display: 'County',
+    const { activePolygonTheme, activePolygonYear } = appStore
+
+    console.log('Activate polygon theme', toJS(activePolygonTheme))
+    let data = polygonStore.getAttribute(activePolygonTheme, activePolygonYear)
+
+    const theme = computeTheme(data, {
+      activePolygonTheme,
+      display: activePolygonTheme,
       type: 'float',
       themeType: 'interpolate',
       colorRange: ['#edf8fb', '#005824'],
-    }
+    })
 
-    console.log('Activate polygon theme', themeConfig.attribute)
-    let data = polygonStore.getAttribute(themeConfig.attribute, 2010)
-
-    const theme = computeTheme(data, themeConfig)
-
-    this.applyTheme('polygons', data, theme, false)
+    this.applyTheme('polygons', data, theme, 'polygons')
   }
 }
 

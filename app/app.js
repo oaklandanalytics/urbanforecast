@@ -9,6 +9,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import { observer } from 'mobx-react'
 
 import appStore from './stores/appStore'
+import mapStore from './stores/mapStore'
 
 const theme = createMuiTheme({
   palette: {
@@ -29,7 +30,8 @@ class App extends React.Component {
         <ThemeProvider theme={theme}>
           <Navbar />
           <Map />
-          <Legend />
+          {mapStore.showParcels && <Legend layer="parcels" />}
+          {mapStore.showPolygons && <Legend layer="polygons" />}
           {appStore.showSidebar && <Sidebar />}
         </ThemeProvider>
       </div>

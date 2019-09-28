@@ -4,6 +4,7 @@ import numeral from 'numeral'
 import _ from 'lodash'
 import { Typography } from '@material-ui/core'
 
+import appStore from '../stores/appStore'
 import mapStore from '../stores/mapStore'
 import configStore from '../stores/configStore'
 
@@ -49,16 +50,17 @@ export default class Legend extends React.Component {
   }
 
   render() {
-    const { legendParams } = mapStore
+    const { layer } = this.props
+    const legendParams = mapStore.legendParams.get(layer)
     if (!legendParams) return null
 
     const { grades, colors } = legendParams
-    const { display } = configStore.activeThemeConfig
+    const title =
+      layer === 'parcels' ? configStore.activeThemeConfig.display : appStore.activePolygonTheme
 
     const legendStyle = {
       position: 'absolute',
       left: '7px',
-      bottom: '7px',
       padding: '6px 8px',
       background: 'rgba(255,255,255,1)',
       boxShadow: '0 0 15px rgba(0,0,0,0.2)',
@@ -69,9 +71,17 @@ export default class Legend extends React.Component {
       zIndex: 9999999,
     }
 
+    if (layer === 'parcels') {
+      legendStyle.bottom = '7px'
+    }
+
+    if (layer === 'polygons') {
+      legendStyle.top = '67px'
+    }
+
     return (
       <div style={legendStyle}>
-        {display && <Typography variant="h6">{display}</Typography>}
+        {title && <Typography variant="h6">{title}</Typography>}
         {grades.map(Legend.formatNumber).map((v, i) => (
           <div key={i}>
             <i style={Legend.getIStyle(colors[i])} />

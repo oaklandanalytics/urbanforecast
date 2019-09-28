@@ -1,11 +1,15 @@
 import d3 from 'd3'
+import { action, observable } from 'mobx'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
+import appStore from './appStore'
 
 class PolygonStore {
   geojson
   tazData
+  @observable attributeNames = [] // attribute names available in tazData
+  @observable years = [] // years available in tazData
 
   load() {
     d3.json(configStore.tazUrl, (error, geojson) => {
@@ -26,9 +30,20 @@ class PolygonStore {
         // have to do it this way in order to replace the NaN values, which aren't real JSON
         // if we fix the NaNs in the python, we can make this look like the above
         text = text.replace(/NaN/g, '0')
-        this.tazData = JSON.parse(text)
+        this.setTazData(JSON.parse(text))
         console.log('Loaded taz data:', this.tazData)
       })
+  }
+
+  @action
+  setTazData(tazData) {
+    this.tazData = tazData
+    const { years, index, ...attributes } = tazData
+
+    this.attributeNames = _.sortBy(_.keys(attributes))
+    this.years = years
+
+    appStore.setActivePolygonTheme('county', 2010)
   }
 
   theme() {

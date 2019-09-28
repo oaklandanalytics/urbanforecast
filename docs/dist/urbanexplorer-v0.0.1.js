@@ -28856,7 +28856,7 @@ object-assign
                         }
                       })),
                       A.setParcelCircles({ type: 'FeatureCollection', features: e.features }),
-                      A.activateTheme($.activeTheme))
+                      A.activateTheme($.activeParcelTheme))
                 })
               },
             },
@@ -28921,7 +28921,7 @@ object-assign
           })(this, e),
             B(this, 'activeFeature', L, this),
             B(this, 'showSidebar', I, this),
-            B(this, 'activeTheme', U, this)
+            B(this, 'activeParcelTheme', U, this)
         }
         var t, n, r
         return (
@@ -28940,7 +28940,7 @@ object-assign
               },
             },
             {
-              key: 'setActiveTheme',
+              key: 'setActiveParcelTheme',
               value: function(e) {
                 ;(this.activeTheme = e), A.activateTheme(e)
               },
@@ -28968,7 +28968,7 @@ object-assign
         return !0
       },
     })),
-    (U = V(D.prototype, 'activeTheme', [h.l], {
+    (U = V(D.prototype, 'activeParcelTheme', [h.l], {
       configurable: !0,
       enumerable: !0,
       writable: !0,
@@ -28985,9 +28985,9 @@ object-assign
     ),
     V(
       D.prototype,
-      'setActiveTheme',
+      'setActiveParcelTheme',
       [h.d],
-      Object.getOwnPropertyDescriptor(D.prototype, 'setActiveTheme'),
+      Object.getOwnPropertyDescriptor(D.prototype, 'setActiveParcelTheme'),
       D.prototype
     ),
     V(
@@ -34455,9 +34455,9 @@ object-assign
                                 f.a.createElement(
                                   ti,
                                   {
-                                    value: $.activeTheme,
+                                    value: $.activeParcelTheme,
                                     onChange: function(e) {
-                                      return $.setActiveTheme(e.target.value)
+                                      return $.setActiveParcelTheme(e.target.value)
                                     },
                                   },
                                   j.themes.map(function(e) {
