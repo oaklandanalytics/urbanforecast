@@ -75,6 +75,26 @@ export default class Sidebar extends React.Component {
           }
           label="Show Map Labels"
         />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={mapStore.showParcels}
+              onChange={v => mapStore.setShowParcels(v.target.checked)}
+              color="secondary"
+            />
+          }
+          label="Show Parcel Layer"
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={mapStore.showPolygons}
+              onChange={v => mapStore.setShowPolygons(v.target.checked)}
+              color="secondary"
+            />
+          }
+          label="Show TAZ Layer"
+        />
       </div>
     )
 

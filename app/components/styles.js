@@ -1,3 +1,5 @@
+import mapStore from '../stores/mapStore'
+
 // this code from
 // https://docs.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
 function getLabelLayer(map) {
@@ -44,6 +46,7 @@ export function addParcelLayer(map) {
     },
     getLabelLayer(map)
   )
+  mapStore.setShowParcels(mapStore.showParcels)
 }
 
 export function addPolygonLayers(map) {
@@ -51,7 +54,6 @@ export function addPolygonLayers(map) {
   const layerName = 'polygons'
   const bordersName = 'polygons_border'
   const highlightLayerName = 'polygons_highlight'
-
   map.addSource(sourceName, {
     type: 'geojson',
     data: {
@@ -100,6 +102,7 @@ export function addPolygonLayers(map) {
     },
     'parcelCircles'
   )
+  mapStore.setShowPolygons(mapStore.showPolygons)
 }
 
 export function addCitiesOutlinesLayer(map, url, color) {

@@ -29,7 +29,7 @@ class ParcelStore {
   theme() {
     if (!this.features) return
     mapStore.setParcelCircles(features2geojson(this.features))
-    mapStore.activateTheme(appStore.activeTheme)
+    mapStore.activateParcelTheme(appStore.activeTheme)
   }
 
   getAttribute(attribute) {

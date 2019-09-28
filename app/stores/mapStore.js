@@ -1,6 +1,8 @@
 import { computed, observable, action } from 'mobx'
 import _ from 'lodash'
 
+import { computeTheme } from '../theming'
+
 import {
   addParcelLayer,
   addCitiesOutlinesLayer,
@@ -10,12 +12,15 @@ import {
 
 import configStore from './configStore'
 import parcelStore from './parcelStore'
+import polygonStore from './polygonStore'
 
 class MapStore {
   map
   @observable mapLabelsVisible = false
   @observable activeBaseMap = 'light'
   @observable legendParams
+  @observable showParcels = false
+  @observable showPolygons = true
 
   @computed
   get baseMapUrl() {
@@ -45,64 +50,50 @@ class MapStore {
   }
 
   @action
+  setShowParcels(showParcels) {
+    this.showParcels = showParcels
+    this.map.setLayoutProperty('parcelCircles', 'visibility', showParcels ? 'visible' : 'none')
+  }
+
+  @action
+  setShowPolygons(showPolygons) {
+    this.showPolygons = showPolygons
+    this.map.setLayoutProperty('polygons', 'visibility', showPolygons ? 'visible' : 'none')
+    this.map.setLayoutProperty('polygons_border', 'visibility', showPolygons ? 'visible' : 'none')
+    this.map.setLayoutProperty(
+      'polygons_highlight',
+      'visibility',
+      showPolygons ? 'visible' : 'none'
+    )
+  }
+
+  @action
   setLegendParams(legendParams) {
     this.legendParams = legendParams
   }
 
   setParcelCircles(geojson) {
+    if (!this.map) return
     this.map.getSource('parcelCircles').setData(geojson)
   }
 
   setPolygons(geojson) {
+    if (!this.map) return
     this.map.getSource('polygons').setData(geojson)
   }
 
-  applyTheme(source, values, { colorScale, legendParams }) {
+  applyTheme(source, values, { colorScale, legendParams }, setLegend = true) {
+    console.log(source, values, colorScale, legendParams)
     values.forEach((v, id) => {
       this.map.setFeatureState({ source, id }, { color: colorScale(v) })
     })
-    this.setLegendParams(legendParams)
-  }
-
-  computeTheme(data, { themeType, colorRange, colorMap }) {
-    console.log('Theming', data)
-
-    let colorScale, legendParams
-    if (themeType === 'interpolate') {
-      const e = d3.extent(data)
-
-      colorScale = d3.scale
-        .linear()
-        .domain(e)
-        .interpolate(d3.interpolateRgb)
-        .range(colorRange)
-
-      // build some intervals in the interpolation range for use in the legend
-      const min = e[0]
-      const max = e[1]
-      const legendDomain = _.range(min, max, (max - min) / 5.0)
-      legendDomain.push(max) // push the max too
-
-      legendParams = {
-        grades: legendDomain,
-        colors: legendDomain.map(colorScale),
-      }
-    } else if (themeType === 'categorical') {
-      colorScale = v => _.get(colorMap, v)
-
-      legendParams = {
-        grades: _.keys(colorMap),
-        colors: _.values(colorMap),
-      }
-    } else {
-      console.log('Theme type not supported')
+    if (setLegend) {
+      this.setLegendParams(legendParams)
     }
-
-    return { colorScale, legendParams }
   }
 
-  activateTheme(activeTheme) {
-    console.log('Activate theme', activeTheme)
+  activateParcelTheme(activeTheme) {
+    console.log('Activate parcel theme', activeTheme)
     const themeConfig = configStore.activeThemeConfig
 
     let data = parcelStore.getAttribute(themeConfig.attribute)
@@ -111,9 +102,26 @@ class MapStore {
       data = _.map(data, d => +d)
     }
 
-    const theme = this.computeTheme(data, themeConfig)
+    const theme = computeTheme(data, themeConfig)
 
     this.applyTheme('parcelCircles', data, theme)
+  }
+
+  activatePolygonTheme() {
+    const themeConfig = {
+      attribute: 'county',
+      display: 'County',
+      type: 'float',
+      themeType: 'interpolate',
+      colorRange: ['#edf8fb', '#005824'],
+    }
+
+    console.log('Activate polygon theme', themeConfig.attribute)
+    let data = polygonStore.getAttribute(themeConfig.attribute, 2010)
+
+    const theme = computeTheme(data, themeConfig)
+
+    this.applyTheme('polygons', data, theme, false)
   }
 }
 

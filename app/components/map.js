@@ -24,9 +24,8 @@ export default class Map extends React.Component {
     map.doubleClickZoom.disable()
     map.dragRotate.disable()
 
-    mapStore.setMap(map)
-
     map.on('style.load', () => {
+      mapStore.setMap(map)
       setLabelLayerVisible(map, mapStore.mapLabelsVisible)
       mapStore.addLayers()
       this.initHover(map)
