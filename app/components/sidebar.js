@@ -1,6 +1,14 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { InputLabel, Select, Switch, FormControlLabel, Card, CardContent } from '@material-ui/core'
+import {
+  InputLabel,
+  Select,
+  Switch,
+  FormControlLabel,
+  Card,
+  CardContent,
+  FormControl,
+} from '@material-ui/core'
 
 import appStore from '../stores/appStore'
 import mapStore from '../stores/mapStore'
@@ -128,9 +136,7 @@ export default class Sidebar extends React.Component {
               <Select
                 native
                 value={appStore.activePolygonTheme}
-                onChange={v =>
-                  appStore.setActivePolygonTheme(v.target.value, appStore.activePolygonYear)
-                }
+                onChange={v => appStore.setActivePolygonTheme(v.target.value)}
               >
                 {polygonStore.attributeNames.map(n => (
                   <option value={n} key={n}>
@@ -139,20 +145,35 @@ export default class Sidebar extends React.Component {
                 ))}
               </Select>
               <div style={{ height: 10 }} />
-              <InputLabel>Active Year</InputLabel>
-              <Select
-                native
-                value={appStore.activePolygonYear}
-                onChange={v =>
-                  appStore.setActivePolygonTheme(appStore.activePolygonTheme, v.target.value)
-                }
-              >
-                {polygonStore.years.map(y => (
-                  <option value={y} key={y}>
-                    {y}
-                  </option>
-                ))}
-              </Select>
+              <FormControl style={{ minWidth: 100 }}>
+                <InputLabel>Lower Year</InputLabel>
+                <Select
+                  native
+                  value={appStore.lowerPolygonYear}
+                  onChange={v => appStore.setLowerPolygonYear(v.target.value)}
+                >
+                  {polygonStore.years.map(y => (
+                    <option value={y} key={y}>
+                      {y}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <FormControl style={{ minWidth: 100 }}>
+                <InputLabel>Upper Year</InputLabel>
+                <Select
+                  native
+                  value={appStore.upperPolygonYear}
+                  onChange={v => appStore.setUpperPolygonYear(v.target.value)}
+                >
+                  {polygonStore.upperYears.map(y => (
+                    <option value={y} key={y}>
+                      {y}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
             </div>
           )}
         </CardContent>

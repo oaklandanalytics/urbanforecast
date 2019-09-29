@@ -1,10 +1,12 @@
 import d3 from 'd3'
-import { action, observable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
+import appStore from './appStore'
 
 class PolygonStore {
+  useLowerYear = 'Lower Year Only'
   geojson
   tazData
   ids
@@ -35,6 +37,11 @@ class PolygonStore {
       })
   }
 
+  @computed
+  get upperYears() {
+    return _.concat([this.useLowerYear], _.filter(this.years, y => y > appStore.lowerPolygonYear))
+  }
+
   @action
   setTazData(tazData) {
     this.tazData = tazData
@@ -51,8 +58,17 @@ class PolygonStore {
     mapStore.activatePolygonTheme()
   }
 
-  getAttribute(attribute, year) {
-    return this.tazData[attribute][year]
+  getAttribute(attribute, lowerYear, upperYear) {
+    const useLowerYear = upperYear === this.useLowerYear
+
+    if (useLowerYear) {
+      return this.tazData[attribute][lowerYear]
+    }
+
+    // return diff, upper year minus lower year
+    const lowerYearValues = this.tazData[attribute][lowerYear]
+    const upperYearValues = this.tazData[attribute][upperYear]
+    return _.zip(lowerYearValues, upperYearValues).map(a => a[1] - a[0])
   }
 }
 

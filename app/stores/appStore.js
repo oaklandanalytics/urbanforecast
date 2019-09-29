@@ -10,7 +10,8 @@ class AppStore {
   @observable showSidebar = true
   @observable activeParcelTheme = configStore.defaultTheme
   @observable activePolygonTheme = 'county'
-  @observable activePolygonYear = 2010
+  @observable lowerPolygonYear = 2010
+  @observable upperPolygonYear = polygonStore.useLowerYear
 
   init() {
     parcelStore.load()
@@ -33,10 +34,25 @@ class AppStore {
   }
 
   @action
-  setActivePolygonTheme(activeTheme, year) {
+  setLowerPolygonYear(year) {
+    this.lowerPolygonYear = year
+    if (year >= this.upperPolygonYear) {
+      // impossible state
+      this.upperPolygonYear = polygonStore.useLowerYear
+    }
+    mapStore.activatePolygonTheme()
+  }
+
+  @action
+  setUpperPolygonYear(year) {
+    this.upperPolygonYear = year
+    mapStore.activatePolygonTheme()
+  }
+
+  @action
+  setActivePolygonTheme(activeTheme) {
     this.activePolygonTheme = activeTheme
-    this.activePolygonYear = year
-    mapStore.activatePolygonTheme(activeTheme, year)
+    mapStore.activatePolygonTheme()
   }
 
   @action

@@ -111,14 +111,19 @@ class MapStore {
   /*
   TODO
   random color scheme
-  allow delta with 2nd year
   */
 
   activatePolygonTheme() {
-    const { activePolygonTheme, activePolygonYear } = appStore
+    const { activePolygonTheme, lowerPolygonYear, upperPolygonYear } = appStore
 
-    console.log('Activate polygon theme', toJS(activePolygonTheme))
-    let data = polygonStore.getAttribute(activePolygonTheme, activePolygonYear)
+    console.log(
+      'Activate polygon theme',
+      toJS(activePolygonTheme),
+      toJS(lowerPolygonYear),
+      toJS(upperPolygonYear)
+    )
+
+    let data = polygonStore.getAttribute(activePolygonTheme, lowerPolygonYear, upperPolygonYear)
     const { ids } = polygonStore
 
     const theme = computeTheme(data, {
