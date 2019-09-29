@@ -108,11 +108,6 @@ class MapStore {
     this.applyTheme('parcelCircles', data, ids, theme, 'parcels')
   }
 
-  /*
-  TODO
-  random color scheme
-  */
-
   activatePolygonTheme() {
     const { activePolygonTheme, lowerPolygonYear, upperPolygonYear } = appStore
 
@@ -125,14 +120,9 @@ class MapStore {
 
     let data = polygonStore.getAttribute(activePolygonTheme, lowerPolygonYear, upperPolygonYear)
     const { ids } = polygonStore
+    const themeConfig = polygonStore.getThemeConfig(activePolygonTheme)
 
-    const theme = computeTheme(data, {
-      activePolygonTheme,
-      display: activePolygonTheme,
-      type: 'float',
-      themeType: 'interpolate',
-      colorRange: ['#edf8fb', '#005824'],
-    })
+    const theme = computeTheme(data, themeConfig)
 
     this.applyTheme('polygons', data, ids, theme, 'polygons')
   }

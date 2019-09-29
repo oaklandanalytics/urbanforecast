@@ -1,12 +1,14 @@
 import d3 from 'd3'
+import _ from 'lodash'
 import { action, observable, computed } from 'mobx'
+import colorbrewer from 'colorbrewer'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
 import appStore from './appStore'
 
 class PolygonStore {
-  useLowerYear = 'Lower Year Only'
+  useLowerYear = 'Use Lower Year'
   geojson
   tazData
   ids
@@ -56,6 +58,28 @@ class PolygonStore {
     if (!this.geojson) return
     mapStore.setPolygons(this.geojson)
     mapStore.activatePolygonTheme()
+  }
+
+  getThemeConfig(activeTheme) {
+    // randomize the color scheme
+    const ind = _.findIndex(this.attributeNames, f => f === activeTheme)
+
+    const colorSchemes = colorbrewer.schemeGroups.sequential
+    const numColorSchemes = _.size(colorSchemes)
+
+    const colorSchemeName = colorSchemes[ind % numColorSchemes]
+    const colorScheme = colorbrewer[colorSchemeName][7]
+
+    const lowColor = colorScheme[0]
+    const highColor = colorScheme[colorScheme.length - 1]
+
+    return {
+      attribute: activeTheme,
+      display: activeTheme,
+      type: 'float',
+      themeType: 'interpolate',
+      colorRange: [lowColor, highColor],
+    }
   }
 
   getAttribute(attribute, lowerYear, upperYear) {
