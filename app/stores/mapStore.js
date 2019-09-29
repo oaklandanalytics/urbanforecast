@@ -70,23 +70,19 @@ class MapStore {
     )
   }
 
-  SDEMStrokeWidth = 2
   @action
   setShowSDEM(showSDEM) {
     this.showSDEM = showSDEM
     _.each(parcelStore.SDEMParcelIds, id => {
       const opacity = showSDEM ? 1 : 0
-      const stroke = showSDEM ? this.SDEMStrokeWidth : 0
+      const stroke = showSDEM ? 1 : 0
       this.map.setFeatureState({ source: 'parcelCircles', id }, { opacity, stroke })
     })
   }
 
   setSDEMWhiteStroke() {
     _.each(parcelStore.SDEMParcelIds, id => {
-      this.map.setFeatureState(
-        { source: 'parcelCircles', id },
-        { stroke: this.SDEMStrokeWidth, strokeColor: '#fff' }
-      )
+      this.map.setFeatureState({ source: 'parcelCircles', id }, { stroke: 1, strokeColor: '#fff' })
     })
   }
 
@@ -116,7 +112,26 @@ class MapStore {
     this.lastFeature = id
   }
 
+  previousFilter = []
+  doParcelFilter() {
+    const setFiltered = (id, filtered) => {
+      const opacity = filtered ? 1 : 0
+      const stroke = filtered ? 1 : 0
+      this.map.setFeatureState({ source: 'parcelCircles', id }, { opacity, stroke })
+    }
+
+    const { filteredIds } = parcelStore
+
+    this.previousFilter.forEach(id => setFiltered(id, 1))
+
+    filteredIds.forEach(id => setFiltered(id, 0))
+
+    this.previousFilter = filteredIds
+  }
+
   applyTheme(source, values, ids, { colorScale, legendParams }, type) {
+    if (!this.map) return
+
     values.forEach((v, index) => {
       const id = ids[index]
       this.map.setFeatureState({ source, id }, { color: colorScale(v) })
@@ -128,7 +143,7 @@ class MapStore {
     console.log('Activate parcel theme', activeTheme)
     const themeConfig = configStore.activeThemeConfig
 
-    let data = parcelStore.getAttribute(themeConfig.attribute)
+    let data = parcelStore.activeAttribute
     const { ids } = parcelStore
 
     if (themeConfig.type === 'float') {

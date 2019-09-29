@@ -1,4 +1,5 @@
 import React from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import {
   InputLabel,
@@ -8,6 +9,8 @@ import {
   Card,
   CardContent,
   FormControl,
+  Slider,
+  Typography,
 } from '@material-ui/core'
 
 import appStore from '../stores/appStore'
@@ -16,7 +19,42 @@ import configStore from '../stores/configStore'
 import parcelStore from '../stores/parcelStore'
 import polygonStore from '../stores/polygonStore'
 import { renderPlace } from '../stores/configStore'
-import { Typography } from '@material-ui/core'
+
+@observer
+class FilterSlider extends React.Component {
+  render() {
+    const showSlider = configStore.activeThemeIsFloat
+    if (!showSlider) return null
+
+    const extent = parcelStore.activeAttributeExtent
+    const min = extent[0]
+    const max = extent[1]
+
+    const twentieths = (extent[1] - extent[0]) / 20
+
+    const filterValue = toJS(parcelStore.filterValue)
+
+    const count = parcelStore.features.length - parcelStore.filteredIds.length
+
+    return (
+      <div style={{ marginTop: 10 }}>
+        <InputLabel>
+          Filter (Min={filterValue[0]}, Max={filterValue[1]}, Count={count})
+        </InputLabel>
+        <Slider
+          onChange={(event, newValue) => {
+            parcelStore.setFilterValue(newValue)
+          }}
+          step={twentieths}
+          marks
+          min={min}
+          value={filterValue}
+          max={max}
+        />
+      </div>
+    )
+  }
+}
 
 @observer
 export default class Sidebar extends React.Component {
@@ -110,6 +148,7 @@ export default class Sidebar extends React.Component {
                   </option>
                 ))}
               </Select>
+              <FilterSlider />
               <FormControlLabel
                 control={
                   <Switch

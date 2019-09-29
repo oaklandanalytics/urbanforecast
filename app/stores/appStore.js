@@ -32,6 +32,7 @@ class AppStore {
   setActiveParcelTheme(activeTheme) {
     this.activeParcelTheme = activeTheme
     mapStore.activateParcelTheme(activeTheme)
+    parcelStore.setFilterValue(parcelStore.activeAttributeExtent)
   }
 
   @action

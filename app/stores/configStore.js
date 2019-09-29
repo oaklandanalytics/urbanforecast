@@ -59,6 +59,11 @@ class ConfigStore {
     const attribute = appStore.activeParcelTheme
     return _.find(this.themes, { attribute })
   }
+
+  @computed
+  get activeThemeIsFloat() {
+    return this.activeThemeConfig.type === 'float'
+  }
 }
 
 export function renderPlace(f) {

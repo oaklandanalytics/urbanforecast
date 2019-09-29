@@ -1,5 +1,5 @@
 import d3 from 'd3'
-import { observable, computed } from 'mobx'
+import { observable, computed, action } from 'mobx'
 
 import { csv2features, features2geojson } from '../utils'
 
@@ -9,6 +9,7 @@ import appStore from './appStore'
 
 class ParcelStore {
   @observable features
+  @observable filterValue
   ids
 
   get(id) {
@@ -41,6 +42,27 @@ class ParcelStore {
     return _.filter(this.features, f => f.properties.SDEM === 'True').map(f => f.id)
   }
 
+  @action
+  setFilterValue(filterValue) {
+    this.filterValue = filterValue
+    mapStore.doParcelFilter()
+  }
+
+  @computed
+  get filteredIds() {
+    const filterThese = []
+    const min = this.filterValue[0]
+    const max = this.filterValue[1]
+
+    this.activeAttribute.forEach((v, ind) => {
+      const id = this.ids[ind]
+      if (+v < min) filterThese.push(id)
+      if (+v > max) filterThese.push(id)
+    })
+
+    return filterThese
+  }
+
   popupText(feature) {
     const attr = appStore.activeParcelTheme
     const value = feature.properties[attr]
@@ -51,6 +73,17 @@ class ParcelStore {
 
   getAttribute(attribute) {
     return this.features.map(f => f.properties[attribute])
+  }
+
+  @computed
+  get activeAttribute() {
+    return this.getAttribute(appStore.activeParcelTheme)
+  }
+
+  @computed
+  get activeAttributeExtent() {
+    if (!this.features) return [0, 10]
+    return d3.extent(this.activeAttribute.map(f => +f))
   }
 }
 
