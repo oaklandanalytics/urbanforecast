@@ -151,14 +151,21 @@ export default class Sidebar extends React.Component {
     const defaultPanel = () => (
       <div>
         <h2>Control Panel</h2>
-        <Typography variant="body2">Click any parcel for more information</Typography>
+        <Typography variant="body2" style={{ marginTop: -20 }}>
+          Click any parcel for more information
+        </Typography>
         <br />
         {tazSettings}
         <br />
         {parcelSettings}
         <br />
-        {showMapLabels}
-        {activeBaseMap}
+        <Card>
+          <CardContent>
+            <Typography variant="h6">Map Settings</Typography>
+            {showMapLabels}
+            {activeBaseMap}
+          </CardContent>
+        </Card>
       </div>
     )
 

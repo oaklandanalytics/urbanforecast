@@ -3,11 +3,11 @@ import { action, observable } from 'mobx'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
-import appStore from './appStore'
 
 class PolygonStore {
   geojson
   tazData
+  ids
   @observable attributeNames = [] // attribute names available in tazData
   @observable years = [] // years available in tazData
 
@@ -18,7 +18,7 @@ class PolygonStore {
         return
       }
 
-      geojson.features.forEach(f => (f.id = f.properties.ZONE_ID - 1))
+      geojson.features.forEach(f => (f.id = f.properties.ZONE_ID))
       console.log('Loaded polygons:', geojson)
       this.geojson = geojson
       this.theme()
@@ -41,9 +41,8 @@ class PolygonStore {
     const { years, index, ...attributes } = tazData
 
     this.attributeNames = _.sortBy(_.keys(attributes))
+    this.ids = index
     this.years = years
-
-    appStore.setActivePolygonTheme('county', 2010)
   }
 
   theme() {

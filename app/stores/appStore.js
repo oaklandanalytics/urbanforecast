@@ -9,8 +9,8 @@ class AppStore {
   @observable activeFeature
   @observable showSidebar = true
   @observable activeParcelTheme = configStore.defaultTheme
-  @observable activePolygonTheme
-  @observable activePolygonYear
+  @observable activePolygonTheme = 'county'
+  @observable activePolygonYear = 2010
 
   init() {
     parcelStore.load()

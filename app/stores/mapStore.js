@@ -84,8 +84,9 @@ class MapStore {
     this.map.getSource('polygons').setData(geojson)
   }
 
-  applyTheme(source, values, { colorScale, legendParams }, type) {
-    values.forEach((v, id) => {
+  applyTheme(source, values, ids, { colorScale, legendParams }, type) {
+    values.forEach((v, index) => {
+      const id = ids[index]
       this.map.setFeatureState({ source, id }, { color: colorScale(v) })
     })
     this.setLegendParams(type, legendParams)
@@ -96,6 +97,7 @@ class MapStore {
     const themeConfig = configStore.activeThemeConfig
 
     let data = parcelStore.getAttribute(themeConfig.attribute)
+    const { ids } = parcelStore
 
     if (themeConfig.type === 'float') {
       data = _.map(data, d => +d)
@@ -103,15 +105,13 @@ class MapStore {
 
     const theme = computeTheme(data, themeConfig)
 
-    this.applyTheme('parcelCircles', data, theme, 'parcels')
+    this.applyTheme('parcelCircles', data, ids, theme, 'parcels')
   }
 
   /*
   TODO
-  fix id of polygon layer
   random color scheme
   allow delta with 2nd year
-  figure out what to do with legend
   */
 
   activatePolygonTheme() {
@@ -119,6 +119,7 @@ class MapStore {
 
     console.log('Activate polygon theme', toJS(activePolygonTheme))
     let data = polygonStore.getAttribute(activePolygonTheme, activePolygonYear)
+    const { ids } = polygonStore
 
     const theme = computeTheme(data, {
       activePolygonTheme,
@@ -128,7 +129,7 @@ class MapStore {
       colorRange: ['#edf8fb', '#005824'],
     })
 
-    this.applyTheme('polygons', data, theme, 'polygons')
+    this.applyTheme('polygons', data, ids, theme, 'polygons')
   }
 }
 

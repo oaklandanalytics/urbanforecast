@@ -8,6 +8,7 @@ import appStore from './appStore'
 
 class ParcelStore {
   features
+  ids
 
   get(id) {
     return this.features[id]
@@ -22,6 +23,7 @@ class ParcelStore {
 
       console.log('Loaded parcels:', rows)
       this.features = csv2features(rows)
+      this.ids = _.map(this.features, f => f.id)
       this.theme()
     })
   }
