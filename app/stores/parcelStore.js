@@ -1,4 +1,5 @@
 import d3 from 'd3'
+import { observable, computed } from 'mobx'
 
 import { csv2features, features2geojson } from '../utils'
 
@@ -7,7 +8,7 @@ import mapStore from './mapStore'
 import appStore from './appStore'
 
 class ParcelStore {
-  features
+  @observable features
   ids
 
   get(id) {
@@ -32,6 +33,11 @@ class ParcelStore {
     if (!this.features) return
     mapStore.setParcelCircles(features2geojson(this.features))
     mapStore.activateParcelTheme(appStore.activeParcelTheme)
+  }
+
+  @computed
+  get SDEMParcelIds() {
+    return _.filter(this.features, f => f.properties.SDEM === 'True').map(f => f.id)
   }
 
   popupText(feature) {

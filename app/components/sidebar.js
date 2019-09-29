@@ -110,6 +110,16 @@ export default class Sidebar extends React.Component {
                   </option>
                 ))}
               </Select>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={mapStore.showSDEM}
+                    onChange={v => mapStore.setShowSDEM(v.target.checked)}
+                    color="secondary"
+                  />
+                }
+                label="Show SDEM Parcels"
+              />
             </div>
           )}
         </CardContent>

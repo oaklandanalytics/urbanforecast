@@ -23,6 +23,7 @@ class MapStore {
   legendParams = observable.map()
   @observable showParcels = false
   @observable showPolygons = true
+  @observable showSDEM = true
 
   @computed
   get baseMapUrl() {
@@ -67,6 +68,16 @@ class MapStore {
       'visibility',
       showPolygons ? 'visible' : 'none'
     )
+  }
+
+  @action
+  setShowSDEM(showSDEM) {
+    this.showSDEM = showSDEM
+    _.each(parcelStore.SDEMParcelIds, id => {
+      const opacity = showSDEM ? 1 : 0
+      const stroke = showSDEM ? 1 : 0
+      this.map.setFeatureState({ source: 'parcelCircles', id }, { opacity, stroke })
+    })
   }
 
   @action
