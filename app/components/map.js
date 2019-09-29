@@ -49,16 +49,40 @@ export default class Map extends React.Component {
   }
 
   initHover(map) {
-    map.off('mousemove')
-    map.on('mousemove', 'parcelCircles', e => {
-      if (_.size(e.features) > 0) {
-        map.getCanvas().style.cursor = 'pointer'
-      }
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
     })
 
+    map.off('mousemove')
     map.off('mouseleave')
+
+    map.on('mousemove', 'parcelCircles', e => {
+      map.getCanvas().style.cursor = 'pointer'
+      const popupText = parcelStore.popupText(e.features[0])
+
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(popupText)
+        .addTo(map)
+    })
+
     map.on('mouseleave', 'parcelCircles', () => {
       map.getCanvas().style.cursor = ''
+      popup.remove()
+    })
+
+    map.on('mousemove', 'polygons', e => {
+      const popupText = polygonStore.popupText(e.features[0])
+
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(popupText)
+        .addTo(map)
+    })
+
+    map.on('mouseleave', 'polygons', () => {
+      popup.remove()
     })
   }
 

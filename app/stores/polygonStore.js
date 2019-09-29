@@ -60,6 +60,15 @@ class PolygonStore {
     mapStore.activatePolygonTheme()
   }
 
+  popupText(feature) {
+    const attr = appStore.activePolygonTheme
+    const { id } = feature
+    const index = this.ids[id]
+    const value = this.attributeValues[index]
+
+    return `${attr}: ${value}`
+  }
+
   getThemeConfig(activeTheme) {
     // randomize the color scheme
     const ind = _.findIndex(this.attributeNames, f => f === activeTheme)
@@ -82,7 +91,14 @@ class PolygonStore {
     }
   }
 
-  getAttribute(attribute, lowerYear, upperYear) {
+  @computed
+  get attributeValues() {
+    const { activePolygonTheme, lowerPolygonYear, upperPolygonYear } = appStore
+
+    const attribute = activePolygonTheme
+    const lowerYear = lowerPolygonYear
+    const upperYear = upperPolygonYear
+
     const useLowerYear = upperYear === this.useLowerYear
 
     if (useLowerYear) {

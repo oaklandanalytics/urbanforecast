@@ -118,7 +118,7 @@ class MapStore {
       toJS(upperPolygonYear)
     )
 
-    let data = polygonStore.getAttribute(activePolygonTheme, lowerPolygonYear, upperPolygonYear)
+    const data = polygonStore.attributeValues
     const { ids } = polygonStore
     const themeConfig = polygonStore.getThemeConfig(activePolygonTheme)
 

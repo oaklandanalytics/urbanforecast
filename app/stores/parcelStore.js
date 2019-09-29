@@ -34,6 +34,14 @@ class ParcelStore {
     mapStore.activateParcelTheme(appStore.activeParcelTheme)
   }
 
+  popupText(feature) {
+    const attr = appStore.activeParcelTheme
+    const value = feature.properties[attr]
+    const title = configStore.activeThemeConfig.display
+
+    return `${title}: ${value}`
+  }
+
   getAttribute(attribute) {
     return this.features.map(f => f.properties[attribute])
   }
