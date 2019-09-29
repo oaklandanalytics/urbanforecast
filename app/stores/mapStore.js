@@ -84,6 +84,17 @@ class MapStore {
     this.map.getSource('polygons').setData(geojson)
   }
 
+  lastFeature
+  highlightFeature(id) {
+    const set = (id, active) =>
+      this.map.setFeatureState({ source: 'parcelCircles', id }, { active })
+
+    if (this.lastFeature) set(this.lastFeature, false)
+    if (id) set(id, true)
+
+    this.lastFeature = id
+  }
+
   applyTheme(source, values, ids, { colorScale, legendParams }, type) {
     values.forEach((v, index) => {
       const id = ids[index]

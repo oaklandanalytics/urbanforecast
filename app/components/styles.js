@@ -46,6 +46,22 @@ export function addParcelLayer(map) {
     },
     getLabelLayer(map)
   )
+
+  map.addLayer(
+    {
+      id: 'parcelCirclesHighlight',
+      source: 'parcelCircles',
+      type: 'circle',
+      paint: {
+        'circle-color': '#ffff3e',
+        'circle-radius': 17,
+        'circle-blur': 1,
+        'circle-opacity': ['case', ['boolean', ['feature-state', 'active'], false], 1, 0],
+      },
+    },
+    'parcelCircles'
+  )
+
   mapStore.setShowParcels(mapStore.showParcels)
 }
 
@@ -72,7 +88,7 @@ export function addPolygonLayers(map) {
         'fill-opacity': ['number', ['feature-state', 'opacity'], 1],
       },
     },
-    'parcelCircles'
+    'parcelCirclesHighlight'
   )
 
   map.addLayer(
@@ -86,7 +102,7 @@ export function addPolygonLayers(map) {
         'line-opacity': 0.3,
       },
     },
-    'parcelCircles'
+    'parcelCirclesHighlight'
   )
 
   map.addLayer(
@@ -100,8 +116,9 @@ export function addPolygonLayers(map) {
         'line-opacity': ['case', ['boolean', ['feature-state', 'active'], false], 1, 0],
       },
     },
-    'parcelCircles'
+    'parcelCirclesHighlight'
   )
+
   mapStore.setShowPolygons(mapStore.showPolygons)
 }
 

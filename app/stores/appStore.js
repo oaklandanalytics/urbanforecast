@@ -25,6 +25,7 @@ class AppStore {
   @action
   setActiveFeature(activeFeature) {
     this.activeFeature = activeFeature
+    mapStore.highlightFeature(activeFeature)
   }
 
   @action
