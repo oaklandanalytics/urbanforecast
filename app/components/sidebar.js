@@ -13,16 +13,27 @@ import { Typography } from '@material-ui/core'
 @observer
 export default class Sidebar extends React.Component {
   render() {
-    const sideStyle = {
-      position: 'absolute',
-      top: 70,
-      right: 10,
-      bottom: 10,
-      width: 350,
-      overflow: 'auto',
-      backgroundColor: '#eceff1',
-      borderRadius: 6,
-    }
+    const sideStyle = appStore.isMobile
+      ? {
+          position: 'absolute',
+          top: 55,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          overflow: 'auto',
+          backgroundColor: '#eceff1',
+          zIndex: 9999999,
+        }
+      : {
+          position: 'absolute',
+          top: 70,
+          right: 10,
+          bottom: 10,
+          width: 350,
+          overflow: 'auto',
+          backgroundColor: '#eceff1',
+          borderRadius: 6,
+        }
 
     const { activeFeature } = appStore
 

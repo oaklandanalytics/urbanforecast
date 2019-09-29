@@ -17,6 +17,10 @@ class AppStore {
     polygonStore.load()
   }
 
+  get isMobile() {
+    return window.innerWidth < 700
+  }
+
   @action
   setActiveFeature(activeFeature) {
     this.activeFeature = activeFeature

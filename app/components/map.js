@@ -66,7 +66,7 @@ export default class Map extends React.Component {
     const mapStyle = {
       position: 'absolute',
       left: 0,
-      top: 60,
+      top: appStore.isMobile ? 55 : 60,
       bottom: 0,
       width: '100%',
     }
