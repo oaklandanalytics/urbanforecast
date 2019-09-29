@@ -41,7 +41,7 @@ export function addParcelLayer(map) {
         'circle-opacity': ['number', ['feature-state', 'opacity'], 1],
         'circle-color': ['string', ['feature-state', 'color'], '#fff'],
         'circle-stroke-width': ['number', ['feature-state', 'stroke'], 1],
-        'circle-stroke-color': '#1c1c1c',
+        'circle-stroke-color': ['string', ['feature-state', 'strokeColor'], '#1c1c1c'],
       },
     },
     getLabelLayer(map)

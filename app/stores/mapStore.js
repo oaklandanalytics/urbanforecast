@@ -70,13 +70,23 @@ class MapStore {
     )
   }
 
+  SDEMStrokeWidth = 2
   @action
   setShowSDEM(showSDEM) {
     this.showSDEM = showSDEM
     _.each(parcelStore.SDEMParcelIds, id => {
       const opacity = showSDEM ? 1 : 0
-      const stroke = showSDEM ? 1 : 0
+      const stroke = showSDEM ? this.SDEMStrokeWidth : 0
       this.map.setFeatureState({ source: 'parcelCircles', id }, { opacity, stroke })
+    })
+  }
+
+  setSDEMWhiteStroke() {
+    _.each(parcelStore.SDEMParcelIds, id => {
+      this.map.setFeatureState(
+        { source: 'parcelCircles', id },
+        { stroke: this.SDEMStrokeWidth, strokeColor: '#fff' }
+      )
     })
   }
 
