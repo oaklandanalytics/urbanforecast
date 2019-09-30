@@ -59,6 +59,8 @@ class ParcelStore {
 
   @computed
   get filteredIds() {
+    if (!this.filterValue) return []
+
     const filterThese = []
     const min = this.filterValue[0]
     const max = this.filterValue[1]
