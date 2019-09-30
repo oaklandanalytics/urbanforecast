@@ -72,6 +72,11 @@ class ParcelStore {
     return filterThese
   }
 
+  @computed
+  get filteredIdsDict() {
+    return _.keyBy(this.filteredIds)
+  }
+
   popupText(feature) {
     const attr = appStore.activeParcelTheme
     const value = feature.properties[attr]

@@ -58,8 +58,11 @@ export default class Map extends React.Component {
     map.off('mouseleave')
 
     map.on('mousemove', 'parcelCircles', e => {
+      const feature = e.features[0]
+      if (parcelStore.filteredIdsDict[feature.id]) return // shape is filtered
+
       map.getCanvas().style.cursor = 'pointer'
-      const popupText = parcelStore.popupText(e.features[0])
+      const popupText = parcelStore.popupText(feature)
 
       popup
         .setLngLat(e.lngLat)
