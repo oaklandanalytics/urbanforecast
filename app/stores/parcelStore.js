@@ -48,6 +48,15 @@ class ParcelStore {
     mapStore.doParcelFilter()
   }
 
+  setLowerFilterValue(lowerFilterValue) {
+    this.setFilterValue([lowerFilterValue, this.filterValue[1]])
+  }
+
+  @action
+  setUpperFilterValue(upperFilterValue) {
+    this.setFilterValue([this.filterValue[0], upperFilterValue])
+  }
+
   @computed
   get filteredIds() {
     const filterThese = []

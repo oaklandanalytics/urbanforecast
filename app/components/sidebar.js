@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   FormControl,
-  Slider,
   Typography,
 } from '@material-ui/core'
 
@@ -19,42 +18,6 @@ import configStore from '../stores/configStore'
 import parcelStore from '../stores/parcelStore'
 import polygonStore from '../stores/polygonStore'
 import { renderPlace } from '../stores/configStore'
-
-@observer
-class FilterSlider extends React.Component {
-  render() {
-    const showSlider = configStore.activeThemeIsFloat
-    if (!showSlider) return null
-
-    const extent = parcelStore.activeAttributeExtent
-    const min = extent[0]
-    const max = extent[1]
-
-    const twentieths = (extent[1] - extent[0]) / 20
-
-    const filterValue = toJS(parcelStore.filterValue)
-
-    const count = parcelStore.features.length - parcelStore.filteredIds.length
-
-    return (
-      <div style={{ marginTop: 10 }}>
-        <InputLabel>
-          Filter (Min={filterValue[0]}, Max={filterValue[1]}, Count={count})
-        </InputLabel>
-        <Slider
-          onChange={(event, newValue) => {
-            parcelStore.setFilterValue(newValue)
-          }}
-          step={twentieths}
-          marks
-          min={min}
-          value={filterValue}
-          max={max}
-        />
-      </div>
-    )
-  }
-}
 
 @observer
 export default class Sidebar extends React.Component {
@@ -253,6 +216,61 @@ export default class Sidebar extends React.Component {
     return (
       <div style={sideStyle}>
         <div style={{ margin: 15 }}>{activeFeature ? activeFeaturePanel() : defaultPanel()}</div>
+      </div>
+    )
+  }
+}
+
+@observer
+class FilterSlider extends React.Component {
+  render() {
+    const showSlider = configStore.activeThemeIsFloat
+    if (!showSlider) return null
+
+    const extent = parcelStore.activeAttributeExtent
+    const min = extent[0]
+    const max = extent[1]
+
+    const twentieths = (extent[1] - extent[0]) / 20
+    const possibleValues = _.range(min, max, twentieths)
+    possibleValues.push(max)
+
+    const filterValue = toJS(parcelStore.filterValue)
+
+    const count = parcelStore.features.length - parcelStore.filteredIds.length
+
+    return (
+      <div style={{ marginTop: 15, marginBottom: 10 }}>
+        <InputLabel>Filter Parcels (Count={count})</InputLabel>
+        <FormControl style={{ minWidth: 100 }}>
+          <InputLabel>Lower Limit</InputLabel>
+          <Select
+            native
+            value={filterValue[0]}
+            onChange={v => parcelStore.setLowerFilterValue(v.target.value)}
+          >
+            {possibleValues.map(y => (
+              <option value={y} key={y}>
+                {y}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <FormControl style={{ minWidth: 100 }}>
+          <InputLabel>Upper Limit</InputLabel>
+          <Select
+            native
+            value={filterValue[1]}
+            onChange={v => parcelStore.setUpperFilterValue(v.target.value)}
+          >
+            {possibleValues.map(y => (
+              <option value={y} key={y}>
+                {y}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
       </div>
     )
   }
