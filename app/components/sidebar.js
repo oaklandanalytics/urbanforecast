@@ -236,6 +236,8 @@ class FilterSlider extends React.Component {
     possibleValues.push(max)
 
     const filterValue = toJS(parcelStore.filterValue)
+    const possibleLowerValues = _.filter(possibleValues, v => v < filterValue[1])
+    const possibleUpperValues = _.filter(possibleValues, v => v > filterValue[0])
 
     const count = parcelStore.features.length - parcelStore.filteredIds.length
 
@@ -249,7 +251,7 @@ class FilterSlider extends React.Component {
             value={filterValue[0]}
             onChange={v => parcelStore.setLowerFilterValue(v.target.value)}
           >
-            {possibleValues.map(y => (
+            {possibleLowerValues.map(y => (
               <option value={y} key={y}>
                 {y}
               </option>
@@ -264,7 +266,7 @@ class FilterSlider extends React.Component {
             value={filterValue[1]}
             onChange={v => parcelStore.setUpperFilterValue(v.target.value)}
           >
-            {possibleValues.map(y => (
+            {possibleUpperValues.map(y => (
               <option value={y} key={y}>
                 {y}
               </option>
