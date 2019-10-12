@@ -4,9 +4,9 @@ import 'firebase/database'
 import appStore from './appStore'
 
 class FirebaseStore {
-  @observable simulations
+  @observable simulations = {}
 
-  init(callback) {
+  init() {
     firebase.initializeApp({
       apiKey: 'AIzaSyBp_KoUOc7VHTGWjSiludbtd3sXnm3ZOMI',
       authDomain: 'forecast-feedback.firebaseapp.com',
@@ -15,10 +15,10 @@ class FirebaseStore {
 
     this.db = firebase.database()
 
-    this.subscribeSimulations(() => callback())
+    this.subscribeSimulations()
   }
 
-  subscribeSimulations(callback) {
+  subscribeSimulations() {
     this.db.ref('simulations').on('value', val => {
       const simulations = val.val()
       this.simulations = simulations
@@ -26,14 +26,17 @@ class FirebaseStore {
       console.log('Simulations updated', simulations)
 
       appStore.setActiveSimulation(_.keys(simulations)[0])
-
-      if (callback) callback()
     })
   }
 
   @computed
   get activeSimulationConfig() {
     return this.simulations[appStore.activeSimulation]
+  }
+
+  @computed
+  get activeSimulationName() {
+    return _.get(this.activeSimulationConfig, 'name')
   }
 }
 

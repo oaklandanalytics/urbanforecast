@@ -9,6 +9,7 @@ import firebaseStore from './firebaseStore'
 class AppStore {
   @observable activeSimulation
   @observable activeFeature
+  @observable sideDrawerOpen = false
   @observable showSidebar = true
   @observable activeParcelTheme = configStore.defaultTheme
   @observable activePolygonTheme = 'county'
@@ -16,11 +17,7 @@ class AppStore {
   @observable upperPolygonYear = polygonStore.useLowerYear
 
   init() {
-    firebaseStore.init(() => {
-      console.log('Firebase initialized ')
-      parcelStore.load()
-      polygonStore.load()
-    })
+    firebaseStore.init()
   }
 
   get isMobile() {
@@ -28,9 +25,17 @@ class AppStore {
   }
 
   @action
+  toggleDrawer() {
+    this.sideDrawerOpen = !this.sideDrawerOpen
+  }
+
+  @action
   setActiveSimulation(activeSimulation) {
     console.log('Setting active simulation', activeSimulation)
     this.activeSimulation = activeSimulation
+
+    parcelStore.load()
+    polygonStore.load()
   }
 
   @action
