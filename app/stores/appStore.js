@@ -4,8 +4,10 @@ import configStore from './configStore'
 import parcelStore from './parcelStore'
 import polygonStore from './polygonStore'
 import mapStore from './mapStore'
+import firebaseStore from './firebaseStore'
 
 class AppStore {
+  @observable activeSimulation
   @observable activeFeature
   @observable showSidebar = true
   @observable activeParcelTheme = configStore.defaultTheme
@@ -14,12 +16,21 @@ class AppStore {
   @observable upperPolygonYear = polygonStore.useLowerYear
 
   init() {
-    parcelStore.load()
-    polygonStore.load()
+    firebaseStore.init(() => {
+      console.log('Firebase initialized ')
+      parcelStore.load()
+      polygonStore.load()
+    })
   }
 
   get isMobile() {
     return window.innerWidth < 700
+  }
+
+  @action
+  setActiveSimulation(activeSimulation) {
+    console.log('Setting active simulation', activeSimulation)
+    this.activeSimulation = activeSimulation
   }
 
   @action

@@ -5,14 +5,13 @@ import { Typography } from '@material-ui/core'
 import numeral from 'numeral'
 
 import appStore from './appStore'
+import firebaseStore from './firebaseStore'
 
 class ConfigStore {
   center = [-122.3, 37.7749]
   zoom = 10
-  parcelUrl = 'data/run43_parcel_output.csv'
   citiesUrl = 'https://fscottfoti.github.io/pda_parcels/cities.geojson'
   tazUrl = 'https://bayareametro.github.io/petrale/zones/travel/tazs.json'
-  tazData = 'data/run43_simulation_output.json'
   themes = [
     {
       attribute: 'building_type',
@@ -63,6 +62,16 @@ class ConfigStore {
   @computed
   get activeThemeIsFloat() {
     return this.activeThemeConfig.type === 'float'
+  }
+
+  @computed
+  get parcelUrl() {
+    return firebaseStore.activeSimulationConfig['parcel_url']
+  }
+
+  @computed
+  get tazData() {
+    return firebaseStore.activeSimulationConfig['taz_url']
   }
 }
 
