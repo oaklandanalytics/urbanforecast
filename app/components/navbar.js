@@ -21,6 +21,9 @@ export default class ButtonAppBar extends React.Component {
     const drawerItems = (
       <div onClick={() => appStore.toggleDrawer()}>
         <List>
+          <ListItem button key={'toggle'} onClick={() => appStore.toggleSidebar()}>
+            <ListItemText primary={'Toggle Sidebar (Or click navbar)'} />
+          </ListItem>
           {_.map(firebaseStore.simulations, (obj, key) => (
             <ListItem button key={key} onClick={() => appStore.setActiveSimulation(key)}>
               <ListItemText primary={obj.name} />

@@ -68,7 +68,7 @@ export default class Legend extends React.Component {
       textAlign: 'left',
       lineHeight: '19px',
       color: '#555',
-      zIndex: 9999999,
+      zIndex: 99,
     }
 
     if (layer === 'parcels') {
