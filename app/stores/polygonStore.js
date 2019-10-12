@@ -37,6 +37,9 @@ class PolygonStore {
         this.setTazData(JSON.parse(text))
         console.log('Loaded taz data:', this.tazData)
       })
+      .catch(error => {
+        console.log('Error fetching polygons:', error)
+      })
   }
 
   @computed
@@ -55,7 +58,7 @@ class PolygonStore {
   }
 
   theme() {
-    if (!this.geojson) return
+    if (!this.geojson || !this.tazData) return
     mapStore.setPolygons(this.geojson)
     mapStore.activatePolygonTheme()
   }
