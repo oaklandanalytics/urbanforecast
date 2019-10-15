@@ -20,6 +20,7 @@ class ParcelStore {
     d3.csv(configStore.parcelUrl, (error, rows) => {
       if (error) {
         console.log('Error fetching parcels:', error)
+        appStore.notify('Error fetching parcels')
         return
       }
 

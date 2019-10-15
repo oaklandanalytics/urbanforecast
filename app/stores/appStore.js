@@ -5,6 +5,7 @@ import parcelStore from './parcelStore'
 import polygonStore from './polygonStore'
 import mapStore from './mapStore'
 import firebaseStore from './firebaseStore'
+import notificationStore from './notificationStore'
 
 class AppStore {
   @observable activeSimulation
@@ -27,6 +28,10 @@ class AppStore {
   @action
   toggleDrawer() {
     this.sideDrawerOpen = !this.sideDrawerOpen
+  }
+
+  notify(message) {
+    notificationStore.enqueueSnackbar({ message })
   }
 
   @action

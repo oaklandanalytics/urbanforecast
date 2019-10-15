@@ -7,6 +7,9 @@ import Legend from './components/legend'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { observer } from 'mobx-react'
+import { SnackbarProvider } from 'notistack'
+
+import Notifier from './components/notifier'
 
 import appStore from './stores/appStore'
 import mapStore from './stores/mapStore'
@@ -26,15 +29,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
           <Navbar />
+          <Notifier />
           <Map />
           {mapStore.showParcels && <Legend layer="parcels" />}
           {mapStore.showPolygons && <Legend layer="polygons" />}
           {appStore.showSidebar && <Sidebar />}
-        </ThemeProvider>
-      </div>
+        </SnackbarProvider>
+      </ThemeProvider>
     )
   }
 }

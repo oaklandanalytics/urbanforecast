@@ -19,6 +19,7 @@ class PolygonStore {
     d3.json(configStore.tazUrl, (error, geojson) => {
       if (error) {
         console.log('Error fetching polygons:', error)
+        appStore.notify('Error fetching polygons')
         return
       }
 
@@ -39,6 +40,7 @@ class PolygonStore {
       })
       .catch(error => {
         console.log('Error fetching polygons:', error)
+        appStore.notify('Error fetching TAZ data')
       })
   }
 
