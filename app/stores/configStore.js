@@ -11,7 +11,7 @@ class ConfigStore {
   center = [-122.3, 37.7749]
   zoom = 10
   citiesUrl = 'https://fscottfoti.github.io/pda_parcels/cities.geojson'
-  tazUrl = 'https://bayareametro.github.io/petrale/zones/travel/tazs.json'
+  tazUrl = 'https://oaklandanalytics.github.io/urbanexplorer/data/tazs.geojson'
   themes = [
     {
       attribute: 'building_type',
