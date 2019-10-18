@@ -6,6 +6,7 @@ import colorbrewer from 'colorbrewer'
 import configStore from './configStore'
 import mapStore from './mapStore'
 import appStore from './appStore'
+import { emptyGeojson } from '../utils'
 
 class PolygonStore {
   useLowerYear = 'Use Lower Year'
@@ -15,7 +16,14 @@ class PolygonStore {
   @observable attributeNames = [] // attribute names available in tazData
   @observable years = [] // years available in tazData
 
+  clear() {
+    this.tazData = undefined
+    mapStore.setPolygons(emptyGeojson)
+  }
+
   load() {
+    this.clear()
+
     d3.json(configStore.tazUrl, (error, geojson) => {
       if (error) {
         console.log('Error fetching polygons:', error)
@@ -37,6 +45,7 @@ class PolygonStore {
         text = text.replace(/NaN/g, '0')
         this.setTazData(JSON.parse(text))
         console.log('Loaded taz data:', this.tazData)
+        this.theme()
       })
       .catch(error => {
         console.log('Error fetching polygons:', error)
