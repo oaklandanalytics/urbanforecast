@@ -1,7 +1,7 @@
 import d3 from 'd3'
 import { observable, computed, action } from 'mobx'
 
-import { csv2features, features2geojson } from '../utils'
+import { csv2features, features2geojson, emptyGeojson } from '../utils'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
@@ -16,10 +16,18 @@ class ParcelStore {
     return this.features[id]
   }
 
+  clear() {
+    this.features = undefined
+    mapStore.setParcelCircles(emptyGeojson)
+  }
+
   load() {
+    this.clear()
+
     d3.csv(configStore.parcelUrl, (error, rows) => {
       if (error) {
         console.log('Error fetching parcels:', error)
+        appStore.notify('Error fetching parcels')
         return
       }
 

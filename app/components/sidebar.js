@@ -31,7 +31,7 @@ export default class Sidebar extends React.Component {
           left: 0,
           overflow: 'auto',
           backgroundColor: '#eceff1',
-          zIndex: 9999999,
+          zIndex: 99,
         }
       : {
           position: 'absolute',
