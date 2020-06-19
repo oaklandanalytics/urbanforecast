@@ -50,7 +50,7 @@ export default class ButtonAppBar extends React.Component {
               onClick={() => appStore.toggleSidebar()}
               style={{ cursor: 'pointer ' }}
             >
-              UrbanExplorer
+              UrbanForecast
             </Typography>
             <span style={{ width: 15 }} />
             {firebaseStore.activeSimulationName}

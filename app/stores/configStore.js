@@ -10,8 +10,8 @@ import firebaseStore from './firebaseStore'
 class ConfigStore {
   center = [-122.3, 37.7749]
   zoom = 10
-  citiesUrl = 'https://fscottfoti.github.io/pda_parcels/cities.geojson'
-  tazUrl = 'https://oaklandanalytics.github.io/urbanexplorer/data/tazs.geojson'
+  citiesUrl = 'data/cities.geojson'
+  tazUrl = 'data/tazs.geojson'
   themes = [
     {
       attribute: 'building_type',
