@@ -18,6 +18,7 @@ import configStore from '../stores/configStore'
 import parcelStore from '../stores/parcelStore'
 import polygonStore from '../stores/polygonStore'
 import { renderPlace } from '../stores/configStore'
+import MenuItem from '@material-ui/core/MenuItem'
 
 @observer
 export default class Sidebar extends React.Component {
@@ -160,14 +161,13 @@ export default class Sidebar extends React.Component {
               <FormControl style={{ minWidth: 100 }}>
                 <InputLabel>Lower Year</InputLabel>
                 <Select
-                  native
                   value={appStore.lowerPolygonYear}
                   onChange={v => appStore.setLowerPolygonYear(v.target.value)}
                 >
                   {polygonStore.years.map(y => (
-                    <option value={y} key={y}>
+                    <MenuItem value={y} key={y}>
                       {y}
-                    </option>
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -175,14 +175,13 @@ export default class Sidebar extends React.Component {
               <FormControl style={{ minWidth: 100 }}>
                 <InputLabel>Upper Year</InputLabel>
                 <Select
-                  native
                   value={appStore.upperPolygonYear}
                   onChange={v => appStore.setUpperPolygonYear(v.target.value)}
                 >
                   {polygonStore.upperYears.map(y => (
-                    <option value={y} key={y}>
+                    <MenuItem value={y} key={y}>
                       {y}
-                    </option>
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
