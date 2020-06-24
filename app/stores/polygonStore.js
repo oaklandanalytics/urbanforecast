@@ -55,7 +55,10 @@ class PolygonStore {
 
   @computed
   get upperYears() {
-    return _.concat([this.useLowerYear], _.filter(this.years, y => y > appStore.lowerPolygonYear))
+    return _.concat(
+      [this.useLowerYear],
+      _.filter(this.years, y => y > appStore.lowerPolygonYear)
+    )
   }
 
   @action
@@ -74,10 +77,18 @@ class PolygonStore {
     mapStore.activatePolygonTheme()
   }
 
+  getIndexForId(id) {
+    // PERF could precompute this
+    for (let i = 0; i < this.ids.length; i++) {
+      if (id === this.ids[i]) return i
+    }
+    alert('No index found for id')
+  }
+
   popupText(feature) {
     const attr = appStore.activePolygonTheme
     const { id } = feature
-    const index = this.ids[id]
+    const index = this.getIndexForId(id)
     const value = this.attributeValues[index]
 
     return `${attr}: ${value}`
