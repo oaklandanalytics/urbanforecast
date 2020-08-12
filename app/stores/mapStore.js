@@ -80,9 +80,12 @@ class MapStore {
     })
   }
 
-  setSDEMWhiteStroke() {
+  setSDEMStroke() {
     _.each(parcelStore.SDEMParcelIds, id => {
-      this.map.setFeatureState({ source: 'parcelCircles', id }, { stroke: 1, strokeColor: '#fff' })
+      this.map.setFeatureState(
+        { source: 'parcelCircles', id },
+        { stroke: 1, strokeColor: '#c9c919' }
+      )
     })
   }
 
@@ -129,12 +132,15 @@ class MapStore {
     this.previousFilter = filteredIds
   }
 
-  applyTheme(source, values, ids, { colorScale, legendParams }, type) {
+  applyTheme(source, values, ids, { colorScale, radiusScale, legendParams }, type) {
     if (!this.map) return
 
     values.forEach((v, index) => {
       const id = ids[index]
-      this.map.setFeatureState({ source, id }, { color: colorScale(v) })
+      this.map.setFeatureState(
+        { source, id },
+        { color: colorScale(v), radius: radiusScale && radiusScale(v) }
+      )
     })
     this.setLegendParams(type, legendParams)
   }

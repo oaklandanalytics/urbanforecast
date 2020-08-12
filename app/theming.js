@@ -3,7 +3,7 @@ import _ from 'lodash'
 export function computeTheme(data, { themeType, colorRange, colorMap }) {
   console.log('Theming', data)
 
-  let colorScale, legendParams
+  let colorScale, radiusScale, legendParams
   if (themeType === 'interpolate') {
     const e = d3.extent(data)
 
@@ -12,6 +12,12 @@ export function computeTheme(data, { themeType, colorRange, colorMap }) {
       .domain(e)
       .interpolate(d3.interpolateRgb)
       .range(colorRange)
+
+    radiusScale = d3.scale
+      .linear()
+      .domain(e)
+      .interpolate(d3.interpolateNumber)
+      .range([3, 7])
 
     // build some intervals in the interpolation range for use in the legend
     const min = e[0]
@@ -34,5 +40,5 @@ export function computeTheme(data, { themeType, colorRange, colorMap }) {
     console.log('Theme type not supported')
   }
 
-  return { colorScale, legendParams }
+  return { colorScale, radiusScale, legendParams }
 }

@@ -35,7 +35,7 @@ class ParcelStore {
       this.features = csv2features(rows)
       this.ids = _.map(this.features, f => f.id)
       this.theme()
-      mapStore.setSDEMWhiteStroke()
+      mapStore.setSDEMStroke()
     })
   }
 

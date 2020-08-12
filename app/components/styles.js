@@ -34,10 +34,7 @@ export function addParcelLayer(map) {
       source: 'parcelCircles',
       type: 'circle',
       paint: {
-        'circle-radius': {
-          base: 1.75,
-          stops: [[12, 2], [20, 200]],
-        },
+        'circle-radius': ['number', ['feature-state', 'radius'], 3],
         'circle-opacity': ['number', ['feature-state', 'opacity'], 1],
         'circle-color': ['string', ['feature-state', 'color'], '#fff'],
         'circle-stroke-width': ['number', ['feature-state', 'stroke'], 1],
