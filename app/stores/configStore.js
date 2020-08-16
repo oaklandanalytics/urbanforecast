@@ -46,6 +46,20 @@ class ConfigStore {
       themeType: 'interpolate',
       colorRange: ['#f7fbff', '#08306b'],
     },
+    {
+      attribute: 'source',
+      display: 'Source',
+      type: 'string',
+      themeType: 'categorical',
+      colorMap: {
+        bas_bp_new: '#FEFF09',
+        rf: '#C3C553',
+        cs: '#FC4D06',
+        h5_inputs: '#FC53D7',
+        developer_model: '#FC1421',
+        manual: '#6e1011',
+      },
+    },
   ]
 
   @computed
