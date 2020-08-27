@@ -202,7 +202,7 @@ export default class Sidebar extends React.Component {
         <br />
         {tazSettings}
         <br />
-        {parcelSettings}
+        {parcelStore.ready ? parcelSettings : <h3>Loading parcels...</h3>}
         <br />
         <Card>
           <CardContent>

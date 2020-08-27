@@ -1,5 +1,5 @@
 import d3 from 'd3'
-import { observable, computed, action, toJS } from 'mobx'
+import { observable, computed, action, runInAction } from 'mobx'
 
 import { csv2features, features2geojson, emptyGeojson } from '../utils'
 
@@ -9,6 +9,7 @@ import appStore from './appStore'
 import _ from 'lodash'
 
 class ParcelStore {
+  @observable ready
   @observable features
   @observable filterValue
   ids
@@ -28,14 +29,13 @@ class ParcelStore {
   load() {
     this.clear()
 
-    appStore.notify('Loading data')
+    runInAction(() => (this.ready = false))
     d3.csv(configStore.parcelUrl, (error, rows) => {
       if (error) {
         console.log('Error fetching parcels:', error)
         appStore.notify('Error fetching parcels')
         return
       }
-      appStore.notify('Converting csv to geojson')
       console.log(`Loaded ${_.size(rows)} parcels`)
       console.log('Sample parcels:', _.slice(rows, 0, 100))
 
@@ -63,12 +63,12 @@ class ParcelStore {
 
   theme() {
     if (!this.features) return
-    appStore.notify('Filtering and theming')
     const parcels = this.getFeaturesInView()
     this.visibleParcelIds = _.fromPairs(_.map(parcels, p => [p.id, true]))
     console.log(`Theming ${parcels.length} features`)
     mapStore.setParcelCircles(features2geojson(parcels))
     mapStore.activateParcelTheme(appStore.activeParcelTheme)
+    runInAction(() => (this.ready = true))
   }
 
   @computed
