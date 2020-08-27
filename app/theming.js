@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export function computeTheme(data, { themeType, colorRange, colorMap }) {
-  console.log('Theming', data)
+  console.log('Theming sample data', _.slice(data, 0, 5000))
 
   let colorScale, radiusScale, legendParams
   if (themeType === 'interpolate') {

@@ -137,6 +137,10 @@ class MapStore {
 
     values.forEach((v, index) => {
       const id = ids[index]
+
+      // not visible, don't bother theming
+      if (source === 'parcelCircles' && !parcelStore.visibleParcelIds[id]) return
+
       this.map.setFeatureState(
         { source, id },
         { color: colorScale(v), radius: radiusScale && radiusScale(v) }

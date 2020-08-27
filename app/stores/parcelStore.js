@@ -12,6 +12,9 @@ class ParcelStore {
   @observable features
   @observable filterValue
   ids
+  // we are filtering to the view since there are so many parcels
+  // this is an object where keys are parcelIds with values that are "true"
+  visibleParcelIds
 
   get(id) {
     return this.features[id]
@@ -62,6 +65,7 @@ class ParcelStore {
     if (!this.features) return
     appStore.notify('Filtering and theming')
     const parcels = this.getFeaturesInView()
+    this.visibleParcelIds = _.fromPairs(_.map(parcels, p => [p.id, true]))
     console.log(`Theming ${parcels.length} features`)
     mapStore.setParcelCircles(features2geojson(parcels))
     mapStore.activateParcelTheme(appStore.activeParcelTheme)

@@ -8,8 +8,8 @@ import appStore from './appStore'
 import firebaseStore from './firebaseStore'
 
 class ConfigStore {
-  center = [-122.3, 37.7749]
-  zoom = 10
+  center = [-122.4, 37.7749]
+  zoom = 12
   citiesUrl = 'data/cities.geojson'
   tazUrl = 'data/tazs.geojson'
   themes = [

@@ -19,6 +19,7 @@ import parcelStore from '../stores/parcelStore'
 import polygonStore from '../stores/polygonStore'
 import { renderPlace } from '../stores/configStore'
 import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
 
 @observer
 export default class Sidebar extends React.Component {
@@ -123,6 +124,7 @@ export default class Sidebar extends React.Component {
                 }
                 label="Show SDEM Parcels"
               />
+              <Button onClick={() => parcelStore.theme()}>Load Parcels in View</Button>
             </div>
           )}
         </CardContent>
