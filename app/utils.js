@@ -1,4 +1,4 @@
-export function csv2features(data) {
+export function csv2features(data, attributesToKeep) {
   return data.map((row, id) => {
     return {
       type: 'Feature',
@@ -7,7 +7,7 @@ export function csv2features(data) {
         coordinates: [+row.x, +row.y],
       },
       id,
-      properties: row,
+      properties: _.pick(row, attributesToKeep),
     }
   })
 }

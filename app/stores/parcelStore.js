@@ -1,11 +1,12 @@
 import d3 from 'd3'
-import { observable, computed, action } from 'mobx'
+import { observable, computed, action, toJS } from 'mobx'
 
 import { csv2features, features2geojson, emptyGeojson } from '../utils'
 
 import configStore from './configStore'
 import mapStore from './mapStore'
 import appStore from './appStore'
+import _ from 'lodash'
 
 class ParcelStore {
   @observable features
@@ -24,24 +25,45 @@ class ParcelStore {
   load() {
     this.clear()
 
+    appStore.notify('Loading data')
     d3.csv(configStore.parcelUrl, (error, rows) => {
       if (error) {
         console.log('Error fetching parcels:', error)
         appStore.notify('Error fetching parcels')
         return
       }
+      appStore.notify('Converting csv to geojson')
+      console.log(`Loaded ${_.size(rows)} parcels`)
+      console.log('Sample parcels:', _.slice(rows, 0, 100))
 
-      console.log('Loaded parcels:', rows)
-      this.features = csv2features(rows)
+      // to save memory only keep certain attributes
+      const attributesToKeep = _.map(configStore.themes, 'attribute')
+
+      this.features = csv2features(rows, attributesToKeep)
       this.ids = _.map(this.features, f => f.id)
       this.theme()
       mapStore.setSDEMStroke()
     })
   }
 
+  getFeaturesInView() {
+    const { _ne, _sw } = mapStore.map.getBounds()
+    return _.filter(
+      this.features,
+      f =>
+        f.geometry.coordinates[0] > _sw.lng &&
+        f.geometry.coordinates[0] < _ne.lng &&
+        f.geometry.coordinates[1] > _sw.lat &&
+        f.geometry.coordinates[1] < _ne.lat
+    )
+  }
+
   theme() {
     if (!this.features) return
-    mapStore.setParcelCircles(features2geojson(this.features))
+    appStore.notify('Filtering and theming')
+    const parcels = this.getFeaturesInView()
+    console.log(`Theming ${parcels.length} features`)
+    mapStore.setParcelCircles(features2geojson(parcels))
     mapStore.activateParcelTheme(appStore.activeParcelTheme)
   }
 
