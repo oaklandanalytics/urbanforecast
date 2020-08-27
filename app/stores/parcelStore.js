@@ -40,7 +40,7 @@ class ParcelStore {
       console.log('Sample parcels:', _.slice(rows, 0, 100))
 
       // to save memory only keep certain attributes
-      const attributesToKeep = _.map(configStore.themes, 'attribute')
+      const attributesToKeep = _.concat(_.map(configStore.themes, 'attribute'), 'SDEM')
 
       this.features = csv2features(rows, attributesToKeep)
       this.ids = _.map(this.features, f => f.id)
