@@ -131,6 +131,7 @@ export default class Sidebar extends React.Component {
       </Card>
     )
 
+    const years = toJS(polygonStore.years)
     const tazSettings = (
       <Card>
         <CardContent>
@@ -159,34 +160,38 @@ export default class Sidebar extends React.Component {
                   </option>
                 ))}
               </Select>
-              <div style={{ height: 10 }} />
-              <FormControl style={{ minWidth: 100 }}>
-                <InputLabel>Lower Year</InputLabel>
-                <Select
-                  value={appStore.lowerPolygonYear}
-                  onChange={v => appStore.setLowerPolygonYear(v.target.value)}
-                >
-                  {polygonStore.years.map(y => (
-                    <MenuItem value={y} key={y}>
-                      {y}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <FormControl style={{ minWidth: 100 }}>
-                <InputLabel>Upper Year</InputLabel>
-                <Select
-                  value={appStore.upperPolygonYear}
-                  onChange={v => appStore.setUpperPolygonYear(v.target.value)}
-                >
-                  {polygonStore.upperYears.map(y => (
-                    <MenuItem value={y} key={y}>
-                      {y}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              {years.length && (
+                <>
+                  <div style={{ height: 10 }} />
+                  <FormControl style={{ minWidth: 100 }}>
+                    <InputLabel>Lower Year</InputLabel>
+                    <Select
+                      value={appStore.lowerPolygonYear}
+                      onChange={v => appStore.setLowerPolygonYear(v.target.value)}
+                    >
+                      {years.map(y => (
+                        <MenuItem value={y} key={y}>
+                          {y}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <FormControl style={{ minWidth: 100 }}>
+                    <InputLabel>Upper Year</InputLabel>
+                    <Select
+                      value={appStore.upperPolygonYear}
+                      onChange={v => appStore.setUpperPolygonYear(v.target.value)}
+                    >
+                      {polygonStore.upperYears.map(y => (
+                        <MenuItem value={y} key={y}>
+                          {y}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </>
+              )}
             </div>
           )}
         </CardContent>
