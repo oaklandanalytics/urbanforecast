@@ -27,6 +27,7 @@ class ParcelStore {
   }
 
   load() {
+    appStore.setActiveFeature()
     this.clear()
 
     runInAction(() => (this.ready = false))
@@ -40,7 +41,19 @@ class ParcelStore {
       console.log('Sample parcels:', _.slice(rows, 0, 100))
 
       // to save memory only keep certain attributes
-      const attributesToKeep = _.concat(_.map(configStore.themes, 'attribute'), 'SDEM')
+      const shownInActiveFeatureData = [
+        'parcel_size',
+        'max_dua',
+        'max_far',
+        'year_built',
+        'development_id',
+        'parcel_id',
+      ]
+      const attributesToKeep = _.concat(
+        _.map(configStore.themes, 'attribute'),
+        'SDEM',
+        shownInActiveFeatureData
+      )
 
       this.features = csv2features(rows, attributesToKeep)
       this.ids = _.map(this.features, f => f.id)

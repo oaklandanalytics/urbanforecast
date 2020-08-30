@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import { computed } from 'mobx'
+import { computed, toJS } from 'mobx'
 import { Typography } from '@material-ui/core'
 import numeral from 'numeral'
 
@@ -91,7 +91,7 @@ class ConfigStore {
 
 export function renderPlace(f) {
   const p = f.properties
-  console.log(f)
+  console.log(toJS(f))
   const fmt = (num, format) => numeral(num).format(format)
   return (
     <Typography variant="body1">
@@ -99,38 +99,24 @@ export function renderPlace(f) {
       <br />
       Development Id: {fmt(p.development_id, '0')}
       <br />
-      Land use: {_.startCase(p.form)}
       <br />
       Building type: {p.building_type}
       <br />
+      Source: {p.source || 'Not present'}
       <br />
-      Year Built: {fmt(p.year_built, '0')}
+      Year Built: {p.year_built === undefined ? 'Not present' : fmt(p.year_built, '0')}
+      <br />
       <br />
       Residential units: {fmt(p.residential_units, '0')}
       <br />
-      Parcel size: {fmt(p.parcel_size / 43560.0, '0.00')} acres
+      Job spaces: {fmt(p.job_spaces, '0')}
       <br />
-      Max far: {fmt(p.max_far, '0.0')}
+      Parcel size:{' '}
+      {!p.parcel_size ? 'Not present' : <span>{fmt(p.parcel_size / 43560.0, '0.00')} acres</span>}
       <br />
-      Max dua: {fmt(p.max_dua, '0.0')}
+      Max far: {p.max_far === undefined ? 'Not present' : fmt(p.max_far, '0.0')}
       <br />
-      Built dua: {fmt(+p.residential_units / (+p.parcel_size / 43560), '0.0')}
-      <br />
-      <br />
-      Old building sqft: {fmt(p.total_sqft, '0,0')}
-      <br />
-      New building sqft: {fmt(p.building_sqft, '0,0')}
-      <br />
-      Net units: {fmt(p.net_units, '0')}
-      <br />
-      Stories: {fmt(p.stories, '0')}
-      <br />
-      Land cost: ${fmt(p.land_cost / 1000000, '0.0')}M<br />
-      Construction cost: ${fmt(p.building_cost / 1000000, '0.0')}M<br />
-      Building revenue: ${fmt(p.building_revenue / 1000000, '0.0')}M<br />
-      Price / sqft: ${fmt(p.residential, '0')}
-      <br />
-      Oldest redev bldg: {fmt(p.oldest_building, '0')}
+      Max dua: {p.max_dua === undefined ? 'Not present' : fmt(p.max_dua, '0.0')}
     </Typography>
   )
 }
