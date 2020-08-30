@@ -81,11 +81,11 @@ export default class Legend extends React.Component {
 
     return (
       <div style={legendStyle}>
-        {title && <Typography variant="h6">{title}</Typography>}
+        {title && <Typography variant="subtitle1">{title}</Typography>}
         {grades.map(Legend.formatNumber).map((v, i) => (
           <div key={i}>
             <i style={Legend.getIStyle(colors[i])} />
-            {v}
+            <Typography variant="body2">{v}</Typography>
           </div>
         ))}
       </div>
