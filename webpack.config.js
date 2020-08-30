@@ -44,7 +44,7 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist',
-    filename: 'urbanexplorer-v0.0.2.js',
+    filename: 'urbanforecast-v0.0.3.js',
     publicPath: 'dist/'
   },
   node: {
