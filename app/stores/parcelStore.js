@@ -1,5 +1,6 @@
 import d3 from 'd3'
 import { observable, computed, action, runInAction } from 'mobx'
+import Geostats from 'geostats'
 
 import { csv2features, features2geojson, emptyGeojson } from '../utils'
 
@@ -120,7 +121,7 @@ class ParcelStore {
     this.activeAttribute.forEach((v, ind) => {
       const id = this.ids[ind]
       if (+v < min) filterThese.push(id)
-      if (+v > max) filterThese.push(id)
+      if (+v >= max) filterThese.push(id)
     })
 
     return filterThese
@@ -141,6 +142,22 @@ class ParcelStore {
 
   getAttribute(attribute) {
     return this.features.map(f => f.properties[attribute])
+  }
+
+  @computed
+  get jenksClasses() {
+    // do jenks
+    const values = _.sampleSize(this.activeAttribute, 5000)
+    const geostats = new Geostats(values)
+    console.log('Computing jenks')
+    const possibleValues = geostats.getClassJenks(7)
+
+    // add min, max if not present
+    const [min, max] = this.activeAttributeExtent
+    if (_.first(possibleValues) !== min) possibleValues.unshift(min)
+    if (_.last(possibleValues) !== max) possibleValues.push(max)
+
+    return possibleValues
   }
 
   @computed

@@ -243,17 +243,11 @@ class FilterSlider extends React.Component {
     const showSlider = configStore.activeThemeIsFloat
     if (!showSlider) return null
 
-    const extent = parcelStore.activeAttributeExtent
-    const min = extent[0]
-    const max = extent[1]
-
-    const twentieths = (extent[1] - extent[0]) / 20
-    const possibleValues = _.range(min, max, twentieths)
-    possibleValues.push(max)
+    const possibleValues = parcelStore.jenksClasses
 
     const filterValue = toJS(parcelStore.filterValue)
     const possibleLowerValues = _.filter(possibleValues, v => v < filterValue[1])
-    const possibleUpperValues = _.filter(possibleValues, v => v > filterValue[0])
+    const possibleUpperValues = _.filter(possibleValues, v => v >= filterValue[0])
 
     const count = parcelStore.features.length - parcelStore.filteredIds.length
 
