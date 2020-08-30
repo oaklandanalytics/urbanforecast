@@ -24,6 +24,7 @@ class MapStore {
   @observable showParcels = false
   @observable showPolygons = true
   @observable showSDEM = true
+  @observable showNonSDEM = true
 
   @computed
   get baseMapUrl() {
@@ -76,6 +77,16 @@ class MapStore {
     _.each(parcelStore.SDEMParcelIds, id => {
       const opacity = showSDEM ? 1 : 0
       const stroke = showSDEM ? 1 : 0
+      this.map.setFeatureState({ source: 'parcelCircles', id }, { opacity, stroke })
+    })
+  }
+
+  @action
+  setShowNonSDEM(showNonSDEM) {
+    this.showNonSDEM = showNonSDEM
+    _.each(parcelStore.nonSDEMParcelIds, id => {
+      const opacity = showNonSDEM ? 1 : 0
+      const stroke = showNonSDEM ? 1 : 0
       this.map.setFeatureState({ source: 'parcelCircles', id }, { opacity, stroke })
     })
   }

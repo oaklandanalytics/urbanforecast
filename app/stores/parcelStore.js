@@ -89,6 +89,11 @@ class ParcelStore {
     return _.filter(this.features, f => f.properties.SDEM === 'True').map(f => f.id)
   }
 
+  @computed
+  get nonSDEMParcelIds() {
+    return _.filter(this.features, f => f.properties.SDEM !== 'True').map(f => f.id)
+  }
+
   @action
   setFilterValue(filterValue) {
     this.filterValue = filterValue

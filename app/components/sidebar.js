@@ -124,6 +124,16 @@ export default class Sidebar extends React.Component {
                 }
                 label="Show SDEM Parcels"
               />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={mapStore.showNonSDEM}
+                    onChange={v => mapStore.setShowNonSDEM(v.target.checked)}
+                    color="secondary"
+                  />
+                }
+                label="Show Non-SDEM Parcels"
+              />
               <Button onClick={() => parcelStore.theme()}>Load Parcels in View</Button>
             </div>
           )}
